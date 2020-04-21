@@ -1,1 +1,3 @@
 # marathondraw
+
+Lets check discord.
