@@ -1,3 +1,3 @@
 # marathondraw
 
-Lets check discord.
+Lets check discord #github
