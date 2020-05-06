@@ -1,5 +1,6 @@
 import socket
 import threading
+import random
 
 # Length of the header that tells the server how big the message will be.
 HEADER = 64
@@ -9,8 +10,11 @@ PORT = 5050
 SERVER = socket.gethostbyname(socket.gethostname())
 
 ADDR = (SERVER, PORT)
-FORMAT = 'utf-8'
+FORMAT = "utf-8"
 DISCONNECT_MESSAGE = "!DISCONNECT"
+
+
+CATEGORIES = ["wristband", "soccer ball", "flashlight", "fan", "binoculars", "diving board", "face", "penguin", "angel", "coffee cup"]
 
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server.bind(ADDR)
@@ -21,17 +25,20 @@ def handle_client(conn, addr):
 
     connected = True
     while connected:
+        for category in CATEGORIES:
+            conn.send(f"Draw {category}.".encode(FORMAT))
+            # Receive the length of the message and then the message.
+            msg_length = conn.recv(HEADER).decode(FORMAT)
+            if msg_length:
+                msg_length = int(msg_length)
+                msg = conn.recv(msg_length).decode(FORMAT)
+                if msg == DISCONNECT_MESSAGE:
+                    connected = False
 
-        # Receive the length of the message and then the message.
-        msg_length = conn.recv(HEADER).decode(FORMAT)
-        if msg_length:
-            msg_length = int(msg_length)
-            msg = conn.recv(msg_length).decode(FORMAT)
-            if msg == DISCONNECT_MESSAGE:
-                connected = False
-
-            print(f"[{addr}] {msg}")
-            conn.send("Msg received".encode(FORMAT))
+                print(f"[{addr}] {msg}")
+                points = random.randint(0, 10)
+                conn.send(f"Points for drawing {points}/10.".encode(FORMAT))
+                #conn.send("Msg received".encode(FORMAT))
 
     conn.close()
         

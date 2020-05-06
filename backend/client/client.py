@@ -3,7 +3,7 @@ import socket
 # Length of the header that tells the server how big the message will be.
 HEADER = 64
 PORT = 5050
-FORMAT = 'utf-8'
+FORMAT = "utf-8"
 DISCONNECT_MESSAGE = "!DISCONNECT"
 
 SERVER = socket.gethostbyname(socket.gethostname())
@@ -26,11 +26,11 @@ def send(msg):
 def test():
     testing = True
     while testing:
+        print(client.recv(2048).decode(FORMAT))
         command = input()
-        if command.lower() == "quit":
+        send(command)
+        if command.lower() == DISCONNECT_MESSAGE:
             testing = False
-        else:
-            send(command)
 
 if __name__ == "__main__":
     print("[STARTING] Client is starting...")
