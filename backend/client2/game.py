@@ -8,6 +8,7 @@ class Game:
         self.id = id
         self.categories = np.load("dataset/categories.npz")["categories"]
         random.shuffle(self.categories)
+        self.index = 0
 
     def ready(self, player):
         self.playersReady[player] = True
@@ -18,3 +19,11 @@ class Game:
     def reset_ready(self):
         for i in range(4):
             self.playersReady[i] = False
+
+    def get_category(self):
+        try:
+            category = self.categories[self.index]
+            self.index += 1
+            return category
+        except:
+            return None
