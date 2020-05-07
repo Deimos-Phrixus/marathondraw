@@ -9,21 +9,22 @@ var socket;
 
 function windowResized() {
   resizeCanvas(window.innerWidth, window.innerHeight);
+  background('#2f2f2f');
 }
 
 function setup() {
   canvas = createCanvas(window.innerWidth, window.innerHeight);
   canvas.position(0, 0);
 
-  background(255);
+  background('#2f2f2f');
 
   socket = io.connect('http://localhost:3000');
   socket.on('mouse', newDrawing);
 }
 
 function newDrawing(data) {
+  stroke('#e8e8e8');
   strokeWeight(4);
-  stroke(255, 100, 100);
   line(data.px, data.py, data.x, data.y);
 }
 
@@ -42,11 +43,12 @@ function draw() {
       socket.emit('mouse', data);
       stroke(0);
       strokeWeight(4);
+      stroke('#e8e8e8');
       line(pmouseX, pmouseY, mouseX, mouseY);
     }
 
     else if (mouseButton === RIGHT) {
-      background(255);
+      background('#2f2f2f');
     }
   }
 }
