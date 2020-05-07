@@ -23,6 +23,12 @@ idCount = 0
 
 
 def threaded_client(conn, p, gameId):
+    """
+    Handle the client.
+    :param conn: The connection with the client.
+    :param p: The player.
+    :param gameId: The game id.
+    """
     global idCount
     conn.send(str.encode(str(p)))
 
