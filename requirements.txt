@@ -1,7 +1,4 @@
-numpy
-pandas
-keras
 plaidml-keras
-plaidbench 
+plaidbench
+tensorflow
 matplotlib
-
