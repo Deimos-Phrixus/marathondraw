@@ -17,12 +17,6 @@ function setup() {
   background('#2f2f2f');
 }
 
-function newDrawing(data) {
-  stroke('#e8e8e8');
-  strokeWeight(4);
-  line(data.px, data.py, data.x, data.y);
-}
-
 function draw() {
   loadPixels();
 
