@@ -1,3 +1,9 @@
+/* construct manually */
+var bar1 = new ldBar("#opponent1");
+/* ldBar stored in the element */
+var bar2 = document.getElementById('opponent1').ldBar;
+bar1.set(60);
+
 var canvas;
 var socket;
 
