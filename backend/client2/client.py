@@ -17,7 +17,7 @@ def main():
             run = False
             print("Couldn't get game")
             break
-        if game.allReady():
+        if game.all_ready():
                 pygame.time.delay(500)
                 try:
                     game = n.send("reset")

@@ -37,7 +37,7 @@ def threaded_client(conn, p, gameId):
                     break
                 else:
                     if data == "reset":
-                        game.resetReady()
+                        game.reset_ready()
                     elif data == "ready":
                         game.ready(p)
 
