@@ -38,12 +38,13 @@ function draw() {
   }
 
   if(mouseIsPressed) {
-
     if(mouseButton === LEFT) {
       socket.emit('mouse', data);
-      stroke(0);
-      strokeWeight(4);
       stroke('#e8e8e8');
+      //Stroke backup algorithm >>> parseInt(Math.log((Math.sqrt(Math.pow((mouseX-pmouseX), 2)+Math.pow((mouseY-pmouseY), 2))))/Math.log(1.6)) + 2 
+      var distance = parseInt(Math.pow((Math.pow((mouseX-pmouseX), 2)+Math.pow((mouseY-pmouseY), 2)), 0.3)) + 4;
+      strokeWeight(distance);
+      console.log(distance);
       line(pmouseX, pmouseY, mouseX, mouseY);
     }
 
