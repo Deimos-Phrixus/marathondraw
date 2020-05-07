@@ -8,11 +8,11 @@ var canvas;
 var socket;
 
 function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
+  resizeCanvas(window.innerWidth, window.innerHeight);
 }
 
 function setup() {
-  canvas = createCanvas(windowWidth, windowHeight);
+  canvas = createCanvas(window.innerWidth, window.innerHeight);
   canvas.position(0, 0);
 
   background(255);
