@@ -1,3 +1,8 @@
+//Disable right click context menu that causes a stroke width bug
+window.addEventListener('contextmenu', function (e) {
+  e.preventDefault();
+}, false);
+
 /* construct manually */
 var bar1 = new ldBar("#opponent1");
 /* ldBar stored in the element */
