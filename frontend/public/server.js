@@ -1,29 +1,32 @@
-let socket = new WebSocket("wss://localhost/marathondraw");
+const socket = new WebSocket('ws://localhost:8080');
 
 //Connection apple
 socket.onopen = function(e) {
-  alert("[open] Connection established");
-  alert("Sending to server");
-  socket.send("I am here");
+  document.title = "Connection established";
+  console.log("[open] connected")
+  document.title = "Sending to server";
+  socket.send("BEGIN");
+  console.log("[sent] initial message sent")
+  document.title = "Connected";
+  
 };
 
 //Server message recieved
 socket.onmessage = function(event) {
-  alert(`[message] Data received from server: ${event.data}`);
+  console.log('[message] Data received from server: '+ event.data);
 };
 
 //Connection closure
 socket.onclose = function(event) {
   if (event.wasClean) {
-    alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
+    document.title = "Closed cleanly";
+    console.log("[close] Event code: "+event.code+"   reason: "+event.reason);
   } else {
-    // e.g. server process killed or network down
-    // event.code is usually 1006 in this case
-    alert('[close] Connection died');
+    document.title = "Closed badly";
   }
 };
 
 //Error handler
 socket.onerror = function(error) {
-  alert(`[error] ${error.message}`);
+  console.log("[error] "+error.message);
 };
