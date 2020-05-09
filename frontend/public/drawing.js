@@ -33,7 +33,11 @@ function draw() {
       background('#2f2f2f');
     }
   }
-    
-  //Image matrix sender
-  socket.send(pixels);
+
+  if(socket.readyState == 1)
+      {
+          //Image matrix sender
+          socket.send(pixels.toString());
+      }
+  
 }
