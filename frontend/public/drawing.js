@@ -18,27 +18,22 @@ function setup() {
 }
 
 function draw() {
-  loadPixels();
-
-  var data = {
-    px: pmouseX,
-    py: pmouseY,
-    x: mouseX,
-    y: mouseY
-  }
-
+  loadPixels()
+    
   if(mouseIsPressed) {
     if(mouseButton === LEFT) {
       stroke('#e8e8e8');
       //Stroke backup algorithm >>> parseInt(Math.log((Math.sqrt(Math.pow((mouseX-pmouseX), 2)+Math.pow((mouseY-pmouseY), 2))))/Math.log(1.6)) + 2
       var distance = parseInt(Math.pow((Math.pow((mouseX-pmouseX), 2)+Math.pow((mouseY-pmouseY), 2)), 0.3)) + 4;
       strokeWeight(distance);
-      console.log(distance);
       line(pmouseX, pmouseY, mouseX, mouseY);
     }
-
+      
     else if (mouseButton === RIGHT) {
       background('#2f2f2f');
     }
   }
+    
+  //Image matrix sender
+  socket.send(pixels);
 }
