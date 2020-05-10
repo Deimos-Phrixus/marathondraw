@@ -6,7 +6,7 @@ class Game:
     def __init__(self, id):
         self.playersReady = [False, False, False, False]
         self.id = id
-        self.categories = np.load("dataset/categories.npz")["categories"]
+        self.categories = np.load("backend/model/categories.npz")["categories"]
         random.shuffle(self.categories)
         self.index = 0
 
