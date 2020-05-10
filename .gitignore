@@ -1,2 +1,4 @@
 data/*
 venv/*
+training/*
+training/data/*
