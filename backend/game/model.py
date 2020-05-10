@@ -7,19 +7,26 @@ from matplotlib import pyplot as plt
 from PIL import Image
 
 class ClassficicationModel:
+
     def __init__(self, model_name="model_opt.h5"):
         print(os.listdir())
         self.model = tf.keras.models.load_model("backend/model/model_opt.h5")
-        self.categories = np.load("backend/model/categories.npz")['categories']
+        self.categories = list(np.load("backend/model/categories.npz")['categories'])
 
-    def predict_category(self, input_img):
-        # assert input_img.shape[0] == 28
-        # assert input_img.shape[1] == 28
-        # assert np.max(input_img) == 1
-        # assert np.min(input_img) == 0
-        
-        return self.categories[np.argmax(self.model.predict(input_img))]
-    
+    def predict_category(self, input_img, category):
+        """
+        For a given image input it will return a catagory predicted.
+
+        :input_img: 28x28 Image array values only 0 and 1.
+        :category: String value of category user is meant to draw. 
+        :return: True if the probability of input_img for category is top 2%.
+        """
+
+        category_ = self.categories.index(category)
+
+        input_img = input_img.reshape(1, 28, 28, 1)
+        predictions = self.model.predict(input_img)[0]
+        return predictions[category_] > np.percentile(predictions, 98)
 
     def reshape_img(self, input_img):
         """
@@ -28,6 +35,7 @@ class ClassficicationModel:
         :input_img: Image array of any size. 
         :return: Return image array of shape 28 x 28
         """
+
         img = Image.fromarray(input_img)
         img = img.resize((28,28))
         return np.array(img)
@@ -53,10 +61,20 @@ class ClassficicationModel:
         return input_img == 0
 
     def process_img(self, input_img):
+        """
+        Process image using reshaped and normalized.
+
+        :input_img: Image to be processed for the model
+        :return: Processed image ready for the model.
+        """
+
         input_img = self.reshape_img(input_img)
         input_img = self.normalize_img(input_img)
         input_img = self.invert_color(input_img)
         return input_img
+
+## Running some tests for model
+## wont run if you did not download the data from the web.
 if __name__ == "__main__":
     classifier = ClassficicationModel()
     mistakes = 0
@@ -74,15 +92,13 @@ if __name__ == "__main__":
         fig.add_subplot(rows, columns, i)
         print(random_img.shape)
         cmap='viridis'
-        if each != classifier.predict_category(input_img):
+        if not classifier.predict_category(input_img, each):
             print("Error predicting", each)
             mistakes += 1
             mis_predictions.append(each)
         else:
             # print("Correctly predicted")
             cmap='gray'
-
-        
         
         plt.imshow(random_img, cmap=cmap)
         plt.axis('off')
