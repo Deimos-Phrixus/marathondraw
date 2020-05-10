@@ -2,11 +2,13 @@ import numpy as np
 import random
 
 
+# Player: index_cat, score
+
 class Game:
     def __init__(self, id):
         self.playersReady = [False, False, False, False]
         self.id = id
-        self.categories = np.load("dataset/categories.npz")["categories"]
+        self.categories = np.load("backend/model/categories.npz")["categories"]
         random.shuffle(self.categories)
         self.index = 0
 
@@ -31,7 +33,7 @@ class Game:
         for i in range(4):
             self.playersReady[i] = False
 
-    def get_category(self):
+    def get_category(self, player):
         """
         Get the category to be drawn
         :return: The category to be drawn or None (no categories left)

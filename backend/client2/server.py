@@ -79,3 +79,5 @@ while True:
 
 
     start_new_thread(threaded_client, (conn, p, gameId))
+
+# np.array(list(map(int,"0,0,0,0,1,0,1".split(",")))).resahpe((x, y))

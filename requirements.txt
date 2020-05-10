@@ -2,3 +2,4 @@ plaidml-keras
 plaidbench
 tensorflow
 matplotlib
+pillow
