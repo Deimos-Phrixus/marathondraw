@@ -1,7 +1,7 @@
 import socket
 from _thread import *
 import pickle
-from game import Game
+from game import Game, Player
 
 # Replace with server IP.
 server = socket.gethostbyname(socket.gethostname())

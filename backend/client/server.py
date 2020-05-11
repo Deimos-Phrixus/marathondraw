@@ -1,58 +1,74 @@
-import socket
-import threading
-import random
+import asyncio
+import websockets
+import functools
+from _thread import *
+import pickle
+from game import Game, Player
 
-# Length of the header that tells the server how big the message will be.
-HEADER = 64
-PORT = 5050
+connected = set()
+games = {}
+idCount = 0
 
-# Replace with SERVER = "Server IP".
-SERVER = socket.gethostbyname(socket.gethostname())
+async def handler(websocket, path, player, gameId):
+    """
+    Handle the client.
+    :param websocket: 
+    :param path:
+    :param player: The player.
+    :param gameId: The game id.
+    """
+    global idCount
+    # Send the player the player id.
+    #await websocket.send(str.encode(str(player.id)))
+    await websocket.send(str(player.id))
+    # Add the player to the game.
+    games[gameId].add_player(player)
 
-ADDR = (SERVER, PORT)
-FORMAT = "utf-8"
-DISCONNECT_MESSAGE = "!DISCONNECT"
-
-
-CATEGORIES = ["wristband", "soccer ball", "flashlight", "fan", "binoculars", "diving board", "face", "penguin", "angel", "coffee cup"]
-
-server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-server.bind(ADDR)
-
-# Method to handle the clients.
-def handle_client(conn, addr):
-    print(f"[NEW CONNECTION] {addr} connected.")
-
-    connected = True
-    while connected:
-        for category in CATEGORIES:
-            conn.send(f"Draw {category}.".encode(FORMAT))
-            # Receive the length of the message and then the message.
-            msg_length = conn.recv(HEADER).decode(FORMAT)
-            if msg_length:
-                msg_length = int(msg_length)
-                msg = conn.recv(msg_length).decode(FORMAT)
-                if msg == DISCONNECT_MESSAGE:
-                    connected = False
-
-                print(f"[{addr}] {msg}")
-                points = random.randint(0, 10)
-                conn.send(f"Points for drawing {points}/10.".encode(FORMAT))
-                #conn.send("Msg received".encode(FORMAT))
-
-    conn.close()
-        
-# Method to start the server.
-def start():
-    server.listen()
-    print(f"[LISTENING] Server is listening on {SERVER}")
     while True:
-        conn, addr = server.accept()
-        thread = threading.Thread(target=handle_client, args=(conn, addr))
-        thread.start()
-        print(f"[ACTIVE CONNECTIONS] {threading.activeCount() - 1}")
+        try:
+            #data = websocket.recv(4096).decode()
+            data = websocket.recv()
+
+            if gameId in games:
+                game = games[gameId]
+
+                if not data:
+                    break
+                else:
+                    if data == "reset":
+                        game.reset_ready()
+                    elif data == "ready":
+                        game.ready(player)
+                    elif data == "drawing":
+                        dimensions = websocket.recv()
+                        drawing_string = websocket.recv()
+                        game.score_drawing(player, dimensions, drawing_string)
+
+                    websocket.sendall(pickle.dumps(game))
+            else:
+                break
+        except:
+            break
+
+    print("Lost connection")
+    try:
+        del games[gameId]
+        print("Closing Game", gameId)
+    except:
+        pass
+    idCount -= 1
 
 
-if __name__ == "__main__":
-    print("[STARTING] Server is starting...")
-    start()
+while True:
+    idCount += 1
+    playerId = (idCount - 1) % 4 + 1
+    player = Player(playerId)
+    gameId = (idCount - 1)//4
+    if not (idCount % 4 == 0):
+        games[gameId] = Game(gameId)
+        print("Creating a new game...")
+
+    asyncio.get_event_loop().run_until_complete(
+        websockets.serve(
+            functools.partial(handler, player = player, gameId = gameId), 'localhost', 5555))
+    asyncio.get_event_loop().run_forever()
