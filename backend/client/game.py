@@ -85,7 +85,7 @@ class Game:
 
     def reset(self):
         """
-        Reset the ready status of all the players
+        Reset the ready status of all the players.
         """
         for key in self.players:
             self.players[key].reset()
@@ -94,8 +94,9 @@ class Game:
 
     def get_category(self, player):
         """
-        Get the category to be drawn
-        :return: The category to be drawn or None (no categories left)
+        Get the category to be drawn.
+        :param player: The player 
+        :return: The category to be drawn or None (no categories left).
         """
         try:
             category = self.categories[player.category_index]
@@ -122,13 +123,25 @@ class Game:
         self.players[player.id].increase_score(score)
 
     def get_info(self, player):
+        """
+        Get the category the player is supposed to draw 
+        and the current scores of all the players.
+        :param player: The player
+        """
         if self.all_finished():
             return "Game finished."
         else:
             category = self.get_category(player)
-            scores = []
+            # scores = []
+            # for key in self.players:
+            #     scores.append(str(self.players[key].score))
+
+            temp = []
             for key in self.players:
-                scores.append(self.players[key].score)
+                temp.append(str(self.players[key].score))
+            scores = ","
+            scores = scores.join(temp)
+
             return f"{category},{scores}"
 
     def start(self):
