@@ -5,6 +5,8 @@ from _thread import *
 import pickle
 from game import Game, Player
 
+NUMBER_OF_PLAYERS = 4
+
 connected = set()
 games = {}
 idCount = 0
@@ -26,25 +28,27 @@ async def handler(websocket, path, player, gameId):
 
     while True:
         try:
-            #data = websocket.recv(4096).decode()
-            data = websocket.recv()
+            #data = await websocket.recv(4096).decode()
+            data = await websocket.recv()
 
             if gameId in games:
                 game = games[gameId]
-
+                game.start()
                 if not data:
                     break
                 else:
-                    if data == "reset":
-                        game.reset_ready()
+                    if data == "finished":
+                        game.finished()
                     elif data == "ready":
                         game.ready(player)
                     elif data == "drawing":
-                        dimensions = websocket.recv()
-                        drawing_string = websocket.recv()
+                        dimensions = await websocket.recv()
+                        drawing_string = await websocket.recv()
                         game.score_drawing(player, dimensions, drawing_string)
 
-                    websocket.sendall(pickle.dumps(game))
+                    
+                    await websocket.send(game.get_info())
+                    game.reset()
             else:
                 break
         except:
@@ -61,11 +65,11 @@ async def handler(websocket, path, player, gameId):
 
 while True:
     idCount += 1
-    playerId = (idCount - 1) % 4 + 1
+    playerId = (idCount - 1) % NUMBER_OF_PLAYERS + 1
     player = Player(playerId)
-    gameId = (idCount - 1)//4
-    if not (idCount % 4 == 0):
-        games[gameId] = Game(gameId)
+    gameId = (idCount - 1)//NUMBER_OF_PLAYERS
+    if not (idCount % NUMBER_OF_PLAYERS == 0):
+        games[gameId] = Game(gameId, NUMBER_OF_PLAYERS)
         print("Creating a new game...")
 
     asyncio.get_event_loop().run_until_complete(
