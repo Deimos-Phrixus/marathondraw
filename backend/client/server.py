@@ -4,6 +4,7 @@ import functools
 from _thread import *
 import pickle
 from game import Game, Player
+import sys
 
 NUMBER_OF_PLAYERS = 4
 
@@ -20,6 +21,7 @@ async def handler(websocket, path, player, gameId):
     :param gameId: The game id.
     """
     global idCount
+    global games
     # Send the player the player id.
     #await websocket.send(str.encode(str(player.id)))
     await websocket.send(str(player.id))
@@ -27,32 +29,45 @@ async def handler(websocket, path, player, gameId):
     games[gameId].add_player(player)
 
     while True:
-        try:
-            #data = await websocket.recv(4096).decode()
-            data = await websocket.recv()
+        #try:
+        
+        
+        
+        
+        #data = await websocket.recv(4096).decode()
+        data = await websocket.recv()
 
-            if gameId in games:
-                game = games[gameId]
-                game.start()
-                if not data:
-                    break
-                else:
-                    if data == "finished":
-                        game.finished()
-                    elif data == "ready":
-                        game.ready(player)
-                    elif data == "drawing":
-                        dimensions = await websocket.recv()
-                        drawing_string = await websocket.recv()
-                        game.score_drawing(player, dimensions, drawing_string)
+        await websocket.send("RAMANISPLATINUM")
 
-                    
-                    await websocket.send(game.get_info())
-                    game.reset()
-            else:
+        if gameId in games:
+            game = games[gameId]
+            game.start()
+            if not data:
+                print("if not data break")
                 break
-        except:
+            else:
+                if data == "finished":
+                    game.finished()
+                elif data == "ready":
+                    game.ready(player)
+                elif data == "drawing":
+                    dimensions = await websocket.recv()
+                    drawing_string = await websocket.recv()
+                    game.score_drawing(player, dimensions, drawing_string)
+
+
+                await websocket.send(game.get_info(player))
+                game.reset()
+        else:
+            print("else gameId in games break")
             break
+            
+            
+            
+            
+        #except:
+            #print("except break")
+            #break
 
     print("Lost connection")
     try:
