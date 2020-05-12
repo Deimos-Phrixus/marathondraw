@@ -37,7 +37,7 @@ class Game:
         self.number_of_players = number_of_players
         self.players = {}
         self.id = id
-        self.categories = np.load("dataset/categories.npz")["categories"]
+        self.categories = np.load("backend/model/categories.npz")["categories"]
         random.shuffle(self.categories)
         self.index = 0
         self.started = False
