@@ -1,4 +1,4 @@
-const socket = new WebSocket('ws://localhost:8080');
+const socket = new WebSocket('ws://localhost:5555');
 
 //Connection apple
 socket.onopen = function(e) {
