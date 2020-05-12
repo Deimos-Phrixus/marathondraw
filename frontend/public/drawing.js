@@ -33,11 +33,15 @@ function draw() {
       background('#2f2f2f');
     }
   }
+}
 
-  if(socket.readyState == 1)
+function keyPressed() {
+  if (keyCode === ENTER) {
+    if(socket.readyState == 1)
       {
-          //Image matrix sender
-          socket.send(pixels.toString());
+          imgUncompressed = pixels;
+          
+          console.log(pixels.toString());
       }
-  
+  }
 }
