@@ -8,7 +8,7 @@ socket.onopen = function(e) {
   socket.send("BEGIN");
   console.log("[sent] initial message sent")
   document.title = "Connected";
-  
+
 };
 
 //Server message recieved

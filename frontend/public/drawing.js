@@ -7,7 +7,6 @@ var canvas;
 
 function windowResized() {
   resizeCanvas(window.innerWidth, window.innerHeight);
-  background('#2f2f2f');
 }
 
 function setup() {
@@ -18,8 +17,7 @@ function setup() {
 }
 
 function draw() {
-  loadPixels()
-    
+
   if(mouseIsPressed) {
     if(mouseButton === LEFT) {
       stroke('#e8e8e8');
@@ -28,20 +26,42 @@ function draw() {
       strokeWeight(distance);
       line(pmouseX, pmouseY, mouseX, mouseY);
     }
-      
+
     else if (mouseButton === RIGHT) {
       background('#2f2f2f');
     }
   }
+
+  loadPixels();
 }
 
 function keyPressed() {
   if (keyCode === ENTER) {
     if(socket.readyState == 1)
       {
-          imgUncompressed = pixels;
-          
-          console.log(pixels.toString());
+         var compressedPixels = compressPixels();
+          console.log(compressedPixels.toString());
+          console.log(pixels.length);
+          console.log(compressedPixels.length);
       }
   }
+}
+
+function compressPixels() {
+  var compressedPixels = [];
+  var i = 0;
+  while(i < pixels.length) {
+    if(pixels[i] < 50) {
+      //0 is the background
+      compressedPixels.push(0);
+    }
+    else{
+      // 1 is the stroke
+      compressedPixels.push(1);
+    }
+
+    i += 4;
+  }
+
+  return compressedPixels;
 }
