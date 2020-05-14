@@ -10,9 +10,11 @@ function windowResized() {
 }
 
 function setup() {
-  pixelDensity(1);
+  // pixelDensity(1);
+  
   canvas = createCanvas(window.innerWidth, window.innerHeight);
   canvas.position(0, 0);
+  background('#2f2f2f');
 }
 
 function draw() {
@@ -25,56 +27,63 @@ function draw() {
       strokeWeight(distance);
       line(pmouseX, pmouseY, mouseX, mouseY);
     }
-
     else if (mouseButton === RIGHT) {
       background('#2f2f2f');
     }
   }
 
-  loadPixels();
 }
 
 function mouseReleased() {
+  loadPixels();
   if(mouseButton === LEFT) {
     var compressedPixels = compressPixels();
     if(socket.readyState == 1)
     {
         socket.send("drawing");
         socket.send(width + "," + height);
-        console.log(width + "," + height);        
+        // console.log(width + ","+ height);        
         socket.send(compressedPixels.toString());
-        console.log(compressedPixels.toString());        
+        // console.log(compressedPixels.toString());        
 
     }
     
-    for(var i; i < height; i++)
-        {
-            var temp = "";
-            for(var j; j < width; j++)
-                {
-                    temp += compressedPixels[j+i*width];
+  //   for(var i; i < height; i++)
+  //       {
+  //           var temp = "";
+  //           for(var j; j < width; j++)
+  //               {
+  //                   temp += compressedPixels[j+i*width];
                     
-                }
-            console.log(temp);
-        }
+  //               }
+  //           console.log(temp);
+  //       }
   }
 }
 
 function compressPixels() {
   var compressedPixels = [];
+  console.log(pixels)
   var i = 0;
-  while(i < pixels.length) {
-    if(pixels[i] < 50) {
-      //0 is the background
-      compressedPixels.push(0);
+  for (y = 0; y < height; y++) {
+    for (x = 0; x < width; x++) {
+      var p = get(x,y);
+      var s = p[0] + p[1] + p[2];
+      compressedPixels.push(s/3.0);
     }
-    else{
-      // 1 is the stroke
-      compressedPixels.push(1);
-    }
-
-    i += 4;
   }
+  // while(i ) {
+  //   if(pixels[i] < 50) {
+  //     //0 is the background
+  //     compressedPixels.push(0);
+  //   }
+  //   else{
+  //     // 1 is the stroke
+  //     compressedPixels.push(1);
+  //   }
+
+  //   i += 4;
+  // }
 
   return compressedPixels;
 }
