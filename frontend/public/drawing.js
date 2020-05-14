@@ -10,6 +10,7 @@ function windowResized() {
 }
 
 function setup() {
+  pixelDensity(1);
   canvas = createCanvas(window.innerWidth, window.innerHeight);
   canvas.position(0, 0);
 }
@@ -35,13 +36,27 @@ function draw() {
 
 function mouseReleased() {
   if(mouseButton === LEFT) {
+    var compressedPixels = compressPixels();
     if(socket.readyState == 1)
     {
-        var compressedPixels = compressPixels();
         socket.send("drawing");
         socket.send(width + "," + height);
+        console.log(width + "," + height);        
         socket.send(compressedPixels.toString());
+        console.log(compressedPixels.toString());        
+
     }
+    
+    for(var i; i < height; i++)
+        {
+            var temp = "";
+            for(var j; j < width; j++)
+                {
+                    temp += compressedPixels[j+i*width];
+                    
+                }
+            console.log(temp);
+        }
   }
 }
 
