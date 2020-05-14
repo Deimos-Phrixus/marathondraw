@@ -114,17 +114,17 @@ class Game:
         :return: The score for the drawing
         """
         x, y = map(int, dimensions.split(","))
-        drawing = np.array(list(map(int, drawing_string.split(",")))).reshape(x, y)
-#        plt.imshow(drawing)
-#        plt.show()
-        print(drawing)
+        drawing = np.array(list(map(int, drawing_string.split(",")))).reshape(y, x)
+        plt.imshow(drawing)
+        plt.show()
+        # print(drawing)
 
-        string666=""
-        for i in range(y):
-            for sos in range(x):
-                string666+=str(drawing[sos, i])
-            print(string666)
-            string666=""
+        # string666=""
+        # for i in range(y):
+        #     for sos in range(x):
+        #         string666+=str(drawing[sos, i])
+        #     print(string666)
+        #     string666=""
     
         score = 0
         # Add condition to pass into the model the category and the drawing array to get True or False
