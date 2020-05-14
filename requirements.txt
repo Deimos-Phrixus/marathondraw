@@ -1,7 +1,7 @@
-plaidml-keras
-plaidbench
-tensorflow
 matplotlib
 pillow
 websockets
 numpy
+plaidml-keras
+plaidbench
+tensorflow
