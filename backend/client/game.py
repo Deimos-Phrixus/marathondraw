@@ -1,4 +1,5 @@
 import numpy as np
+from matplotlib import pyplot as plt
 import random
 
 class Player:
@@ -8,8 +9,8 @@ class Player:
         self.score = 0
         self.ready = False
         self.finished = False
-        
-    
+
+
     def next_category(self):
         """
         Increment the category index the player is currently drawing.
@@ -30,7 +31,7 @@ class Player:
         self.score = 0
         self.ready = False
         self.finished = False
-    
+
 
 class Game:
     def __init__(self, id, number_of_players):
@@ -89,13 +90,13 @@ class Game:
         """
         for key in self.players:
             self.players[key].reset()
-        
+
         self.started = False
 
     def get_category(self, player):
         """
         Get the category to be drawn.
-        :param player: The player 
+        :param player: The player
         :return: The category to be drawn or None (no categories left).
         """
         try:
@@ -119,12 +120,12 @@ class Game:
         # Add condition to pass into the model the category and the drawing array to get True or False
         if(True):
             score = 1
-        
+
         self.players[player.id].increase_score(score)
 
     def get_info(self, player):
         """
-        Get the category the player is supposed to draw 
+        Get the category the player is supposed to draw
         and the current scores of all the players.
         :param player: The player
         """

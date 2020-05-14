@@ -15,7 +15,7 @@ idCount = 0
 async def handler(websocket, path, player, gameId):
     """
     Handle the client.
-    :param websocket: 
+    :param websocket:
     :param path:
     :param player: The player.
     :param gameId: The game id.
@@ -30,10 +30,10 @@ async def handler(websocket, path, player, gameId):
 
     while True:
         #try:
-        
-        
-        
-        
+
+
+
+
         #data = await websocket.recv(4096).decode()
         data = await websocket.recv()
 
@@ -53,6 +53,8 @@ async def handler(websocket, path, player, gameId):
                 elif data == "drawing":
                     dimensions = await websocket.recv()
                     drawing_string = await websocket.recv()
+
+                    print(dimensions)
                     game.score_drawing(player, dimensions, drawing_string)
 
 
@@ -61,10 +63,10 @@ async def handler(websocket, path, player, gameId):
         else:
             print("else gameId in games break")
             break
-            
-            
-            
-            
+
+
+
+
         #except:
             #print("except break")
             #break
@@ -89,5 +91,5 @@ while True:
 
     asyncio.get_event_loop().run_until_complete(
         websockets.serve(
-            functools.partial(handler, player = player, gameId = gameId), 'localhost', 5555))
+            functools.partial(handler, player = player, gameId = gameId), 'localhost', 5555, max_size = 2**25))
     asyncio.get_event_loop().run_forever()

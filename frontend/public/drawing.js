@@ -12,8 +12,6 @@ function windowResized() {
 function setup() {
   canvas = createCanvas(window.innerWidth, window.innerHeight);
   canvas.position(0, 0);
-
-  background('#2f2f2f');
 }
 
 function draw() {
@@ -35,15 +33,15 @@ function draw() {
   loadPixels();
 }
 
-function keyPressed() {
-  if (keyCode === ENTER) {
+function mouseReleased() {
+  if(mouseButton === LEFT) {
     if(socket.readyState == 1)
-      {
-         var compressedPixels = compressPixels();
-          console.log(compressedPixels.toString());
-          console.log(pixels.length);
-          console.log(compressedPixels.length);
-      }
+    {
+        var compressedPixels = compressPixels();
+        socket.send("drawing");
+        socket.send(width + "," + height);
+        socket.send(compressedPixels.toString());
+    }
   }
 }
 
