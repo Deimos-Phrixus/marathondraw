@@ -1,0 +1,33 @@
+body{
+    font-family: "Segoe UI Light";
+    width: 100vw;
+    padding: 0px;
+    overflow-x: hidden;
+    text-align: center;
+    display: grid;
+    grid-template-rows: 10vh 80hv 10hv;
+}
+#topUI{
+    width: 100%;
+}
+#info{
+    display: grid;
+    grid-auto-columns: 1fr 1fr 1fr;
+}
+#options{
+    grid-auto-columns: 1fr 1fr 1fr;
+}
+#opponentBars{
+    grid-template-rows: 1fr 1fr 1fr
+}
+#paint{
+    padding: 0px;
+}
+footer{
+    background-color: #9932cc;
+    color: #ffffff;
+}
+footer > p{
+    margin: auto;
+    text-align: center;
+}
