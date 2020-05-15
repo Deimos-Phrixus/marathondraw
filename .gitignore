@@ -2,3 +2,4 @@ data/*
 venv/*
 training/*
 training/data/*
+__pycache__/*
