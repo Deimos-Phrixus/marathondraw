@@ -23,8 +23,8 @@ function setup() {
   // rx, by = width, height;
 }
 
-var offsetx = 50;
-var offsety = 80;
+var offsetx = 40;
+var offsety = 60;
 
 function draw() {
 
@@ -35,6 +35,7 @@ function draw() {
       var distance = parseInt(Math.pow((Math.pow((mouseX-pmouseX), 2)+Math.pow((mouseY-pmouseY), 2)), 0.3)) + 4;
       strokeWeight(5);
       line(pmouseX, pmouseY, mouseX, mouseY);
+      // keep track of the focus area
       lx = Math.min(lx, pmouseX-distance-10, mouseX-distance-offsetx);
       rx = Math.max(rx, pmouseX+distance+10, mouseX+distance+offsetx);
       uy = Math.min(uy, pmouseY-distance-10, pmouseY-distance-offsety);
@@ -61,10 +62,10 @@ function mouseReleased() {
 
 function compressPixels() {
   var compressedPixels = [];
-  console.log(pixels)
   var i = 0;
-  var dim = Math.max(Math.abs(uy-by), Math.abs(lx-rx));
 
+  // maing dimension a square
+  var dim = Math.max(Math.abs(uy-by), Math.abs(lx-rx));
   var yadd = dim-Math.abs(uy-by)
   uy -= parseInt(yadd/2)
   by += yadd - parseInt(yadd/2)
@@ -72,12 +73,7 @@ function compressPixels() {
   lx -= parseInt(xadd/2)
   rx += xadd - parseInt(xadd/2)
   
-
-  // alert(uy)
-  // alert(by)
-  // alert(lx)
-  // alert(rx)
-  console.log(uy, by, lx, rx);
+  // console.log(uy, by, lx, rx);
   for (y = uy; y < by; y++) {
     for (x = lx; x < rx; x++) {
       var p = get(x,y);
@@ -111,7 +107,9 @@ function keyPressed() {
         // console.log(width + ","+ height);        
         socket.send(compressedPixels.toString());
         // console.log(compressedPixels.toString());        
-
     }
+    // here it should check if things are correct and if so
+    // update to tell user to draw the category
+    // if it isn't shows error message.
   }
 }

@@ -13,7 +13,6 @@ class Player:
         self.ready = False
         self.finished = False
 
-
     def next_category(self):
         """
         Increment the category index the player is currently drawing.
@@ -100,7 +99,6 @@ class Game:
         """
         for key in self.players:
             self.players[key].reset()
-
         self.started = False
 
     def get_category(self, player):
@@ -125,15 +123,8 @@ class Game:
         """
         x, y = map(int, dimensions.split(","))
         drawing = np.array(list(map(int, drawing_string.split(",")))).reshape(y, x)
-        np.savez("drawing_example.npz", drawing=drawing)
-        # drawing = drawing == 47
-
-        plt.imshow(drawing, cmap='gray')
-        plt.show()
         drawing = self.game_model.reshape_img(drawing) == 0
 
-        plt.imshow(drawing, cmap='gray')
-        plt.show()
         score = 0
         next_category = ""
         # Add condition to pass into the model the category and the drawing array to get True or False

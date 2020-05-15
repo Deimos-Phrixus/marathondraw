@@ -11,7 +11,6 @@ class ClassficicationModel:
     def __init__(self, model_name="model_opt.h5"):
         # print(os.listdir())
         self.model = tf.keras.models.load_model("backend/model/model_opt.h5")
-        print(self.model.summary)
         self.categories = list(np.load("backend/model/categories.npz")['categories'])
 
     def predict_category(self, input_img, category):
@@ -23,18 +22,12 @@ class ClassficicationModel:
         :return: True if the probability of input_img for category is top 2%.
         """
 
-        print(category)
         category_ = self.categories.index(category)
-        print(category_)
-        print(np.max(input_img), np.min(input_img))
-        # plt.imshow(input_img)
-        # plt.figure(num='inside prediction')
-        # plt.show()
+        # print()
         input_img = input_img.reshape(1, 28, 28, 1).astype('float64')
-        
         predictions = self.model.predict(input_img)[0]
         print("thoughts", self.categories[np.argmax(predictions)])
-        print("for actual category score", predictions[category_])
+        print("for", category, category_, "probability", predictions[category_])
         return predictions[category_] > np.percentile(predictions, 98)
 
     def reshape_img(self, input_img):

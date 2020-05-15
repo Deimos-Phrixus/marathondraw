@@ -3,3 +3,6 @@ venv/*
 training/*
 training/data/*
 __pycache__/*
+*/__pycache__/*
+*__pycache__/*
+__pycache__*

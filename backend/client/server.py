@@ -29,11 +29,8 @@ async def handler(websocket, path, player, gameId):
     games[gameId].add_player(player)
 
     while True:
-        #try:
-        
-        
-        #data = await websocket.recv(4096).decode()
-        data = await websocket.recv()
+        try:
+            data = await websocket.recv()
 
         if gameId in games:
             game = games[gameId]
@@ -54,29 +51,27 @@ async def handler(websocket, path, player, gameId):
                         dimensions = await websocket.recv()
                         drawing_string = await websocket.recv()
 
-                        print(dimensions)
-                        next_category = game.score_drawing(player, dimensions, drawing_string)
+                            print("Image received with dimensions", dimensions)
+                            next_category = game.score_drawing(player, dimensions, drawing_string)
 
-                        await websocket.send(next_category)
+                            await websocket.send(next_category)
 
-                    await websocket.send(game.get_info(player))
-                else:
-                    if data == "name":
-                        name = await websocket.recv()
-                        game.set_name(player, name)
-                    elif data == "ready":
-                        game.ready(player)
+                        await websocket.send(game.get_info(player))
+                    else:
+                        if data == "name":
+                            name = await websocket.recv()
+                            game.set_name(player, name)
+                        elif data == "ready":
+                            game.ready(player)
 
-                if game.all_finished():
-                    game.reset()
-        else:
-            print("else gameId in games break")
+                    if game.all_finished():
+                        game.reset()
+            else:
+                print("else gameId in games break")
+                break
+        except:
+            print("except break")
             break
-            
-            
-#        except:
-#            print("except break")
-#            break
 
     print("Lost connection")
     try:
