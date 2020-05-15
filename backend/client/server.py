@@ -31,7 +31,7 @@ async def handler(websocket, path, player, gameId):
     while True:
         #try:
 
-
+        
         #data = await websocket.recv(4096).decode()
         data = await websocket.recv()
 
