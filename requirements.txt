@@ -2,7 +2,5 @@ matplotlib
 pillow
 websockets
 numpy
-plaidml-keras
-plaidbench
 tensorflow
 sklearn
