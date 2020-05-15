@@ -9,8 +9,9 @@ from PIL import Image
 class ClassficicationModel:
 
     def __init__(self, model_name="model_opt.h5"):
-        print(os.listdir())
+        # print(os.listdir())
         self.model = tf.keras.models.load_model("backend/model/model_opt.h5")
+        print(self.model.summary)
         self.categories = list(np.load("backend/model/categories.npz")['categories'])
 
     def predict_category(self, input_img, category):
@@ -22,23 +23,32 @@ class ClassficicationModel:
         :return: True if the probability of input_img for category is top 2%.
         """
 
+        print(category)
         category_ = self.categories.index(category)
-
-        input_img = input_img.reshape(1, 28, 28, 1)
+        print(category_)
+        print(np.max(input_img), np.min(input_img))
+        # plt.imshow(input_img)
+        # plt.figure(num='inside prediction')
+        # plt.show()
+        input_img = input_img.reshape(1, 28, 28, 1).astype('float64')
+        
         predictions = self.model.predict(input_img)[0]
+        print("thoughts", self.categories[np.argmax(predictions)])
+        print("for actual category score", predictions[category_])
         return predictions[category_] > np.percentile(predictions, 98)
 
     def reshape_img(self, input_img):
         """
         Reshapes given image into 28 x 28 image, making it suitable for the model
+        Expects input without normalized, and returns black and white image.
+        White as the bg. Black for drawing secitons.
 
         :input_img: Image array of any size. 
         :return: Return image array of shape 28 x 28
         """
-
+        
         img = Image.fromarray(input_img)
-        img = img.resize((28,28))
-        return np.array(img)
+        return np.array(img.resize((28,28), Image.BILINEAR))
 
     def normalize_img(self, input_img):
         """
@@ -87,8 +97,11 @@ if __name__ == "__main__":
         datafiles = np.load("training/data/"+each)
 
         random_img = datafiles[np.random.randint(13000, 23000)]
+        
         random_img = classifier.process_img(random_img.reshape(28, 28))
-        input_img = random_img.reshape(1, 28, 28, 1)
+        
+        input_img = random_img#.reshape(1, 28, 28, 1)
+        
         fig.add_subplot(rows, columns, i)
         print(random_img.shape)
         cmap='viridis'
