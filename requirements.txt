@@ -5,4 +5,4 @@ numpy
 plaidml-keras
 plaidbench
 tensorflow
-tkinter
+sklearn
