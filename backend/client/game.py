@@ -72,7 +72,7 @@ class Game:
         Update the status of the player to finished.
         :param player: The player whose status needs to be updated.
         """
-       player.finished = True
+        player.finished = True
 
     def all_finished(self):
         """
@@ -127,7 +127,15 @@ class Game:
             string666=""
     
         score = 0
-        
+        next_category = ""
+        # Add condition to pass into the model the category and the drawing array to get True or False
+        if(True):
+            score = 1
+            player.increase_score(score)
+            player.next_category()
+            next_category = self.get_category(player)
+
+        return next_category
 
     def get_info(self, player):
         """
