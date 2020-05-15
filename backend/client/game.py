@@ -1,8 +1,10 @@
 import numpy as np
 from matplotlib import pyplot as plt
 import random
-
+from sklearn import preprocessing
+from model import *
 class Player:
+
     def __init__(self, id):
         self.id = id
         self.name = ""
@@ -43,6 +45,7 @@ class Game:
         random.shuffle(self.categories)
         self.index = 0
         self.started = False
+        self.game_model = ClassficicationModel()
 
     def add_player(self, player):
         """
@@ -122,21 +125,20 @@ class Game:
         """
         x, y = map(int, dimensions.split(","))
         drawing = np.array(list(map(int, drawing_string.split(",")))).reshape(y, x)
-        plt.imshow(drawing)
-        plt.show()
-        # print(drawing)
+        np.savez("drawing_example.npz", drawing=drawing)
+        # drawing = drawing == 47
 
-        # string666=""
-        # for i in range(y):
-        #     for sos in range(x):
-        #         string666+=str(drawing[sos, i])
-        #     print(string666)
-        #     string666=""
-    
+        plt.imshow(drawing, cmap='gray')
+        plt.show()
+        drawing = self.game_model.reshape_img(drawing) == 0
+
+        plt.imshow(drawing, cmap='gray')
+        plt.show()
         score = 0
         next_category = ""
         # Add condition to pass into the model the category and the drawing array to get True or False
-        if(True):
+        if(self.game_model.predict_category(drawing, self.categories[player.category_index])):
+            print("IT IS TRUE")
             score = 1
             player.increase_score(score)
             player.next_category()

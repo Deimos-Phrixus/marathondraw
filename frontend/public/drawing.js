@@ -23,8 +23,8 @@ function setup() {
   // rx, by = width, height;
 }
 
-var offsetx = 50
-var offsety = 100
+var offsetx = 50;
+var offsety = 80;
 
 function draw() {
 
@@ -63,7 +63,8 @@ function compressPixels() {
   var compressedPixels = [];
   console.log(pixels)
   var i = 0;
-  var dim = Math.max(Math.abs(uy-by), Math.abs(lx-rx))
+  var dim = Math.max(Math.abs(uy-by), Math.abs(lx-rx));
+
   var yadd = dim-Math.abs(uy-by)
   uy -= parseInt(yadd/2)
   by += yadd - parseInt(yadd/2)
