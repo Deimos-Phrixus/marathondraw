@@ -5,6 +5,7 @@ import random
 class Player:
     def __init__(self, id):
         self.id = id
+        self.name = ""
         self.category_index = 0
         self.score = 0
         self.ready = False
@@ -50,6 +51,12 @@ class Game:
         """
         self.players[player.id] = player
 
+    def set_name(self, player, name):
+        """
+        Set the name of the player.
+        :param player: The player whose name is to be set.
+        """
+        player.name = name
     def ready(self, player):
         """
         Update the status of the player to ready.
@@ -111,7 +118,7 @@ class Game:
         :param category: The category that is supposed to be drawn.
         :param dimensions: The dimensions of the canvas.
         :param drawing_string: The drawing to be scored.
-        :return: The score for the drawing
+        :return next_category: The next category to be drawn or an empty string if the drawing was not accepted.
         """
         x, y = map(int, dimensions.split(","))
         drawing = np.array(list(map(int, drawing_string.split(",")))).reshape(x, y)
@@ -147,9 +154,12 @@ class Game:
             return "Game finished."
         else:
             category = self.get_category(player)
-            # scores = []
-            # for key in self.players:
-            #     scores.append(str(self.players[key].score))
+
+            temp = []
+            for key in self.players:
+                temp.append(self.players[key].name)
+            names = ","
+            names = names.join(temp)
 
             temp = []
             for key in self.players:
@@ -157,7 +167,7 @@ class Game:
             scores = ","
             scores = scores.join(temp)
 
-            return f"{category},{scores}"
+            return f"{category},{names},{scores}"
 
     def start(self):
         """
