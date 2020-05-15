@@ -4,6 +4,7 @@ window.addEventListener('contextmenu', function (e) {
 }, false);
 
 var canvas;
+var lx, rx, ty, by;
 
 function windowResized() {
   resizeCanvas(window.innerWidth, window.innerHeight);
@@ -15,6 +16,11 @@ function setup() {
   canvas = createCanvas(window.innerWidth, window.innerHeight);
   canvas.position(0, 0);
   background('#2f2f2f');
+  lx = width;
+  uy = height;
+  rx = 0;
+  by = 0;
+  // rx, by = width, height;
 }
 
 function draw() {
@@ -26,6 +32,10 @@ function draw() {
       var distance = parseInt(Math.pow((Math.pow((mouseX-pmouseX), 2)+Math.pow((mouseY-pmouseY), 2)), 0.3)) + 4;
       strokeWeight(distance);
       line(pmouseX, pmouseY, mouseX, mouseY);
+      lx = Math.min(lx, pmouseX-distance-10, mouseX-distance-10);
+      rx = Math.max(rx, pmouseX+distance+10, mouseX+distance+10);
+      uy = Math.min(uy, pmouseY-distance-10, pmouseY-distance-10);
+      by = Math.max(by, pmouseY+distance+10, pmouseY+distance+10);
     }
     else if (mouseButton === RIGHT) {
       background('#2f2f2f');
@@ -41,7 +51,7 @@ function mouseReleased() {
     if(socket.readyState == 1)
     {
         socket.send("drawing");
-        socket.send(width + "," + height);
+        socket.send(Math.abs(rx-lx) + "," + Math.abs(by-uy));
         // console.log(width + ","+ height);        
         socket.send(compressedPixels.toString());
         // console.log(compressedPixels.toString());        
@@ -65,8 +75,13 @@ function compressPixels() {
   var compressedPixels = [];
   console.log(pixels)
   var i = 0;
-  for (y = 0; y < height; y++) {
-    for (x = 0; x < width; x++) {
+  // alert(uy)
+  // alert(by)
+  // alert(lx)
+  // alert(rx)
+  console.log(uy, by, lx, rx);
+  for (y = uy; y < by; y++) {
+    for (x = lx; x < rx; x++) {
       var p = get(x,y);
       var s = p[0] + p[1] + p[2];
       compressedPixels.push(s/3.0);
