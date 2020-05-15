@@ -30,7 +30,7 @@ async def handler(websocket, path, player, gameId):
 
     while True:
         #try:
-
+        
         
         #data = await websocket.recv(4096).decode()
         data = await websocket.recv()
@@ -38,8 +38,9 @@ async def handler(websocket, path, player, gameId):
         if gameId in games:
             game = games[gameId]
 
-            # Start the game if not started
+            # Try to start the game if not started
             if not game.started:
+                await websocket.send("Player connected and waiting.")
                 game.start()
 
             if not data:
@@ -57,11 +58,14 @@ async def handler(websocket, path, player, gameId):
                         next_category = game.score_drawing(player, dimensions, drawing_string)
 
                         await websocket.send(next_category)
-                else:
-                    if data == "ready":
-                        game.ready(player)
 
-                await websocket.send(game.get_info(player))
+                    await websocket.send(game.get_info(player))
+                else:
+                    if data == "name":
+                        name = await websocket.recv()
+                        game.set_name(player, name)
+                    elif data == "ready":
+                        game.ready(player)
 
                 if game.all_finished():
                     game.reset()
