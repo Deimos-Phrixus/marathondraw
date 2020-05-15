@@ -32,38 +32,36 @@ async def handler(websocket, path, player, gameId):
         try:
             data = await websocket.recv()
 
-        if gameId in games:
-            game = games[gameId]
+            if gameId in games:
+                game = games[gameId]
 
-            # Try to start the game if not started
-            if not game.started:
-                await websocket.send("Player connected and waiting.")
-                game.start()
+                # Try to start the game if not started
+                if not game.started:
+                    await websocket.send("Player connected and waiting.")
+                    game.start()
 
-            if not data:
-                print("if not data break")
-                break
-            else:
-                if game.started:
-                    if data == "finished":
-                        game.finished()
-                    elif data == "drawing":
-                        dimensions = await websocket.recv()
-                        drawing_string = await websocket.recv()
-
+                if not data:
+                    print("if not data break")
+                    break
+                else:
+                    if game.started:
+                        if data == "finished":
+                            game.finished()
+                        elif data == "drawing":
+                            print("receiving drawing")
+                            dimensions = await websocket.recv()
+                            drawing_string = await websocket.recv()
                             print("Image received with dimensions", dimensions)
                             next_category = game.score_drawing(player, dimensions, drawing_string)
-
                             await websocket.send(next_category)
-
-                        await websocket.send(game.get_info(player))
+                            await websocket.send(game.get_info(player))
                     else:
                         if data == "name":
                             name = await websocket.recv()
                             game.set_name(player, name)
                         elif data == "ready":
                             game.ready(player)
-
+                            
                     if game.all_finished():
                         game.reset()
             else:
