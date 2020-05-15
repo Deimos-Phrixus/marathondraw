@@ -68,7 +68,7 @@ async def handler(websocket, path, player, gameId):
                         game.reset()
             else:
                 print("else gameId in games break")
-                break
+                break  
         except:
             print("except break")
             break
