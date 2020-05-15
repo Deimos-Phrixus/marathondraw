@@ -1,8 +1,10 @@
 import numpy as np
 from matplotlib import pyplot as plt
 import random
-
+from sklearn import preprocessing
+from model import *
 class Player:
+
     def __init__(self, id):
         self.id = id
         self.name = ""
@@ -10,7 +12,6 @@ class Player:
         self.score = 0
         self.ready = False
         self.finished = False
-
 
     def next_category(self):
         """
@@ -43,6 +44,7 @@ class Game:
         random.shuffle(self.categories)
         self.index = 0
         self.started = False
+        self.game_model = ClassficicationModel()
 
     def add_player(self, player):
         """
@@ -97,7 +99,6 @@ class Game:
         """
         for key in self.players:
             self.players[key].reset()
-
         self.started = False
 
     def get_category(self, player):
@@ -121,22 +122,14 @@ class Game:
         :return next_category: The next category to be drawn or an empty string if the drawing was not accepted.
         """
         x, y = map(int, dimensions.split(","))
-        drawing = np.array(list(map(int, drawing_string.split(",")))).reshape(x, y)
-#        plt.imshow(drawing)
-#        plt.show()
-        print(drawing)
+        drawing = np.array(list(map(int, drawing_string.split(",")))).reshape(y, x)
+        drawing = self.game_model.reshape_img(drawing) == 0
 
-        string666=""
-        for i in range(y):
-            for sos in range(x):
-                string666+=str(drawing[sos, i])
-            print(string666)
-            string666=""
-    
         score = 0
         next_category = ""
         # Add condition to pass into the model the category and the drawing array to get True or False
-        if(True):
+        if(self.game_model.predict_category(drawing, self.categories[player.category_index])):
+            print("IT IS TRUE")
             score = 1
             player.increase_score(score)
             player.next_category()
