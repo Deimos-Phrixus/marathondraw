@@ -55,7 +55,7 @@ class Game:
         Update the status of the player to ready.
         :param player: The player whose status needs to be updated.
         """
-        self.players[player.id].ready = True
+        player.ready = True
 
     def all_ready(self):
         """
@@ -72,7 +72,7 @@ class Game:
         Update the status of the player to finished.
         :param player: The player whose status needs to be updated.
         """
-        self.players[player.id].finished = True
+       player.finished = True
 
     def all_finished(self):
         """
@@ -97,13 +97,13 @@ class Game:
         """
         Get the category to be drawn.
         :param player: The player
-        :return: The category to be drawn or None (no categories left).
+        :return: The category to be drawn or message "Finished" (no categories left).
         """
         try:
             category = self.categories[player.category_index]
             return category
         except:
-            return None
+            return "Finished"
 
     def score_drawing(self, player, dimensions, drawing_string):
         """
@@ -117,11 +117,7 @@ class Game:
         drawing = np.array(list(map(int, drawing_string.split(",")))).reshape(x, y)
 
         score = 0
-        # Add condition to pass into the model the category and the drawing array to get True or False
-        if(True):
-            score = 1
-
-        self.players[player.id].increase_score(score)
+        
 
     def get_info(self, player):
         """
@@ -149,5 +145,5 @@ class Game:
         """
         Start the game.
         """
-        if not self.started and len(self.players) == self.number_of_players and self.all_ready():
+        if len(self.players) == self.number_of_players and self.all_ready():
             self.started = True

@@ -33,33 +33,39 @@ async def handler(websocket, path, player, gameId):
 
 
 
-
         #data = await websocket.recv(4096).decode()
         data = await websocket.recv()
 
-        await websocket.send("RAMANISPLATINUM")
-
         if gameId in games:
             game = games[gameId]
-            game.start()
+
+            # Start the game if not started
+            if not game.started:
+                game.start()
+
             if not data:
                 print("if not data break")
                 break
             else:
-                if data == "finished":
-                    game.finished()
-                elif data == "ready":
-                    game.ready(player)
-                elif data == "drawing":
-                    dimensions = await websocket.recv()
-                    drawing_string = await websocket.recv()
+                if game.started:
+                    if data == "finished":
+                        game.finished()
+                    elif data == "drawing":
+                        dimensions = await websocket.recv()
+                        drawing_string = await websocket.recv()
 
-                    print(dimensions)
-                    game.score_drawing(player, dimensions, drawing_string)
+                        print(dimensions)
+                        next_category = game.score_drawing(player, dimensions, drawing_string)
 
+                        await websocket.send(next_category)
+                else:
+                    if data == "ready":
+                        game.ready(player)
 
                 await websocket.send(game.get_info(player))
-                game.reset()
+
+                if game.all_finished():
+                    game.reset()
         else:
             print("else gameId in games break")
             break
