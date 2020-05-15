@@ -31,8 +31,7 @@ async def handler(websocket, path, player, gameId):
     while True:
         #try:
 
-
-
+        
         #data = await websocket.recv(4096).decode()
         data = await websocket.recv()
 
@@ -69,13 +68,11 @@ async def handler(websocket, path, player, gameId):
         else:
             print("else gameId in games break")
             break
-
-
-
-
-        #except:
-            #print("except break")
-            #break
+            
+            
+#        except:
+#            print("except break")
+#            break
 
     print("Lost connection")
     try:

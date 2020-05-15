@@ -3,43 +3,17 @@
 
   <head>
       <meta charset="utf-8">
-      <link rel="stylesheet" type="text/css" href="main.css">
-      <script src="libraries/p5.js" charset="utf-8"></script>
-      <script src="libraries/p5.sound.js" charset="utf-8"></script>
-      <script src="server.js" charset="utf-8"></script>
-      <script src="drawing.js" charset="utf-8"></script>
+      <link rel="stylesheet" type="text/css" href="index.css">
   </head>
   <body>
-      <div id="topUI">
-        <div id="info">
-            <div>
-                <p>draw: snake</p>
-            </div>
-            <div>
-                <p>60</p>
-            </div>
-            <div id="options">
-                <div>
-                    <p>erase</p>
-                </div>
-                <div>
-                    <p>skip</p>
-                </div>
-                <div>
-                    <p>quit</p>
-                </div>
-            </div>
-        </div>
-        <div id=opponentBars>
-            <div id="opponent1"></div>
-            <div id="opponent2" class="ldBar" data-value="50"></div>
-            <div id="opponent3"></div>
-        <div>
+      <div id="container">
+          <div id="play">
+              <button onClick="window.location.href = 'game.html'";>play!</button>
+          </div>
+          <div id="aboutus">
+              <button >about us</button>
+          </div>
       </div>
-      <div id="paint"></div>
-      <footer>
-        <p id="ai">snake?</p>
-      </footer>
   </body>
 
 </html>
