@@ -45,6 +45,7 @@ class Game:
         self.index = 0
         self.started = False
         self.game_model = ClassficicationModel()
+        self.running = False #Necessary to inform client,only once, that game has started.
 
     def add_player(self, player):
         """
