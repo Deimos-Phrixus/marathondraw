@@ -6,7 +6,7 @@ import pickle
 from game import Game, Player
 import sys
 
-NUMBER_OF_PLAYERS = 4
+NUMBER_OF_PLAYERS = 1
 
 connected = set()
 games = {}
@@ -24,22 +24,28 @@ async def handler(websocket, path, player, gameId):
     global games
     # Send the player the player id.
     #await websocket.send(str.encode(str(player.id)))
-    await websocket.send(str(player.id))
+    await websocket.send("Player #"+str(player.id))
     # Add the player to the game.
     games[gameId].add_player(player)
 
     while True:
         try:
-            data = await websocket.recv()
+            #data = await websocket.recv()
 
             if gameId in games:
                 game = games[gameId]
 
                 # Try to start the game if not started
                 if not game.started:
-                    await websocket.send("Player connected and waiting.")
+                    await websocket.send("0,Player connected and waiting.")
                     game.start()
-
+                    print("connected and waiting")
+                elif not game.running:
+                    game.running = True
+                    await websockets.send("1,Game started")
+                    print("game started")
+                    
+                data = await websocket.recv()   
                 if not data:
                     print("if not data break")
                     break
@@ -85,10 +91,13 @@ while True:
     playerId = (idCount - 1) % NUMBER_OF_PLAYERS + 1
     player = Player(playerId)
     gameId = (idCount - 1)//NUMBER_OF_PLAYERS
-    if not (idCount % NUMBER_OF_PLAYERS == 0):
-        games[gameId] = Game(gameId, NUMBER_OF_PLAYERS)
-        print("Creating a new game...")
-
+    #if not (idCount % NUMBER_OF_PLAYERS == 0):
+        #games[gameId] = Game(gameId, NUMBER_OF_PLAYERS)
+        #print("Creating a new game...")
+        
+    games[gameId] = Game(gameId, NUMBER_OF_PLAYERS)
+    print("Creating a new game...")
+    
     asyncio.get_event_loop().run_until_complete(
         websockets.serve(
             functools.partial(handler, player = player, gameId = gameId), 'localhost', 5555, max_size = 2**25))
