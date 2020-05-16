@@ -71,7 +71,8 @@ class Game:
         :return: The score for the drawing
         """
         x, y = map(int, dimensions.split(","))
-        drawing = np.array(list(map(int, drawing_string.split(",")))).reshape(x, y)
+        drawing = np.array(list(map(int, drawing_string.split(",")))).reshape(y,x)
+        print(drawing.shape)
 
         score = 0
         # Add condition to pass into the model the category and the drawing array to get True or False
