@@ -61,7 +61,7 @@ class Game:
         """
         player.name = name
         self.ready(player)
-        
+
     def ready(self, player):
         """
         Update the status of the player to ready.
@@ -112,7 +112,7 @@ class Game:
         """
         try:
             category = self.categories[player.category_index]
-            return category
+            return category[:-4]
         except:
             return "Finished"
 
