@@ -45,6 +45,7 @@ class Game:
         self.index = 0
         self.started = False
         self.game_model = ClassficicationModel()
+        self.running = False #Necessary to inform client,only once, that game has started.
 
     def add_player(self, player):
         """
@@ -59,6 +60,8 @@ class Game:
         :param player: The player whose name is to be set.
         """
         player.name = name
+        self.ready(player)
+        
     def ready(self, player):
         """
         Update the status of the player to ready.
