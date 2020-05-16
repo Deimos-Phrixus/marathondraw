@@ -21,6 +21,11 @@ function loadingScreen() {
     </div>`;
 }
 
+function changeToDraw(category) {
+    var toDraw = document.getElementById("todraw");
+    toDraw.innerHTML = category;
+}
+
 function game() {
     var imported = document.createElement('script');
     imported.src = 'libraries/p5.js';
@@ -32,7 +37,7 @@ function game() {
     document.getElementById("container").innerHTML = `<div id="topUI">
         <div id="info">
             <div>
-                <p>draw: snake</p>
+                <p id="todraw">draw: snake</p>
             </div>
             <div>
                 <p>60</p>

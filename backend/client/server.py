@@ -53,6 +53,7 @@ async def handler(websocket, path, player, gameId):
         elif not game.running:
             game.running = True
             await websocket.send("1,Game started")
+            await websocket.send("2,"+game.get_category(player))
             print("game started")
         if game.running: 
             data = await websocket.recv()   
@@ -65,7 +66,7 @@ async def handler(websocket, path, player, gameId):
                     drawing_string = await websocket.recv()
                     print("Image received with dimensions", dimensions)
                     next_category = game.score_drawing(player, dimensions, drawing_string)
-                    await websocket.send(next_category)
+                    await websocket.send("2,"+next_category)
                     await websocket.send(game.get_info(player))
             if game.all_finished():
                 game.reset()

@@ -27,6 +27,10 @@ socket.onmessage = function (event) {
             console.log('Game started and running.')
             game();
             break;
+        case "2":
+            console.log(event.data.split(",")[1] + " needs to be drawn");
+            changeToDraw(event.data.split(",")[1])
+            break;
     }
 };
 
