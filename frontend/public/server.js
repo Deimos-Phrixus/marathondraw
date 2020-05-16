@@ -1,11 +1,15 @@
 const socket = new WebSocket('ws://localhost:5555');
 
+var nickname = prompt("Nickname?", Math.floor(Math.random() * 100));
+
 //Connection apple
 socket.onopen = function (e) {
     document.title = "Connected";
     console.log("[open] connected")
     document.title = "Searching room...";
-    socket.send("BEGIN");
+    // socket.send("BEGIN");
+    socket.send("name," + nickname);
+    
     console.log("[sent] initial message sent")
     document.title = "Connected";
 

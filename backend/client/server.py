@@ -26,56 +26,52 @@ async def handler(websocket, path, player, gameId):
     #await websocket.send(str.encode(str(player.id)))
     await websocket.send("Player #"+str(player.id))
     # Add the player to the game.
-    games[gameId].add_player(player)
+    if gameId in games:
+        game = games[gameId]
+    else:
+        print("Room connection error. The room got deleted?")
+        await websocket.send("Connection lost. Server error")
+        return
+    
+    game.add_player(player)
 
+    name = await websocket.recv() # "name,<actual_name>"
+    if name.split(",")[0] != "name":
+        await websocket.send("Wrong format. Loosing connection")
+        print("Ending connection for incorrect format")
+        return
+    player_name = ''.join(name.split(",")[1:]) # doing a join for case of player using ',' in there name
+    game.set_name(player, player_name)
+    
     while True:
-        try:
-            #data = await websocket.recv()
-
-            if gameId in games:
-                game = games[gameId]
-
-                # Try to start the game if not started
-                if not game.started:
-                    await websocket.send("0,Player connected and waiting.")
-                    game.start()
-                    print("connected and waiting")
-                elif not game.running:
-                    game.running = True
-                    await websockets.send("1,Game started")
-                    print("game started")
-                    
-                data = await websocket.recv()   
-                if not data:
-                    print("if not data break")
-                    break
-                else:
-                    if game.started:
-                        if data == "finished":
-                            game.finished()
-                        elif data == "drawing":
-                            print("receiving drawing")
-                            dimensions = await websocket.recv()
-                            drawing_string = await websocket.recv()
-                            print("Image received with dimensions", dimensions)
-                            next_category = game.score_drawing(player, dimensions, drawing_string)
-                            await websocket.send(next_category)
-                            await websocket.send(game.get_info(player))
-                    else:
-                        if data == "name":
-                            name = await websocket.recv()
-                            game.set_name(player, name)
-                        elif data == "ready":
-                            game.ready(player)
-                            
-                    if game.all_finished():
-                        game.reset()
-            else:
-                print("else gameId in games break")
-                break  
-        except:
-            print("except break")
-            break
+        # try:
+        # Try to start the game if not started
+        if not game.started:
+            await websocket.send("0,Player connected and waiting.")
+            game.start()
+            print("connected and waiting")
+        elif not game.running:
+            game.running = True
+            await websocket.send("1,Game started")
+            print("game started")
+        if game.running: 
+            data = await websocket.recv()   
+            if game.started:
+                if data == "finished":
+                    game.finished()
+                elif data == "drawing":
+                    print("receiving drawing")
+                    dimensions = await websocket.recv()
+                    drawing_string = await websocket.recv()
+                    print("Image received with dimensions", dimensions)
+                    next_category = game.score_drawing(player, dimensions, drawing_string)
+                    await websocket.send(next_category)
+                    await websocket.send(game.get_info(player))
+            if game.all_finished():
+                game.reset()
+        # except:
+        #     print("except break")
+        #     break
 
     print("Lost connection")
     try:

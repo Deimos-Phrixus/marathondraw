@@ -60,6 +60,8 @@ class Game:
         :param player: The player whose name is to be set.
         """
         player.name = name
+        self.ready(player)
+        
     def ready(self, player):
         """
         Update the status of the player to ready.
