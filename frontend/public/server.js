@@ -1,13 +1,15 @@
 const socket = new WebSocket('ws://localhost:5555');
 
-var nickname = prompt("Nickname?", Math.floor(Math.random() * 100));
-
 //Connection apple
 socket.onopen = function (e) {
     document.title = "Connected";
     console.log("[open] connected")
     document.title = "Searching room...";
-    socket.send("name," + nickname);
+
+    loadingScreen();
+
+    getParam = new URLSearchParams(window.location.search); //https://www.sitepoint.com/get-url-parameters-with-javascript/
+    socket.send("name," + getParam.get('nickname'));
 
     console.log("[sent] initial message sent")
     document.title = "Connected";
@@ -24,7 +26,7 @@ socket.onmessage = function (event) {
             break;
         case "1": //Game started
             console.log('Game started and running.');
-            game();
+            gameScreen();
             break;
         case "2": //Drawing categories and predictions
             var code2 = event.data.split(",");
