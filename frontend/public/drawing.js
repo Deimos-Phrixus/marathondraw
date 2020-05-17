@@ -92,6 +92,7 @@ function compressPixels() {
 function keyPressed() {
     if (keyCode == ENTER) {
         aiReply("thinking...");
+
         var compressedPixels = compressPixels();
         if (socket.readyState == 1) {
             socket.send("drawing");
@@ -103,6 +104,8 @@ function keyPressed() {
         // here it should check if things are correct and if so
         // update to tell user to draw the category
         // if it isn't shows error message.
+
+
     }
 }
 
