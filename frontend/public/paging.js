@@ -1,3 +1,4 @@
+//Loading screen for matchmaking
 function loadingScreen() {
     document.getElementById("container").innerHTML = `<!-- LOADING -->
     <div class="loader loader--style1" title="0" style="margin-top: 10vh;">
@@ -21,6 +22,7 @@ function loadingScreen() {
     </div>`;
 }
 
+//Change category to draw
 function changeToDraw(category) {
     var toDraw = document.getElementById("todraw");
     toDraw.innerHTML = "draw: " + category;

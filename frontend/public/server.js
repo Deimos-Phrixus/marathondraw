@@ -7,7 +7,6 @@ socket.onopen = function (e) {
     document.title = "Connected";
     console.log("[open] connected")
     document.title = "Searching room...";
-    // socket.send("BEGIN");
     socket.send("name," + nickname);
 
     console.log("[sent] initial message sent")
@@ -19,12 +18,12 @@ socket.onopen = function (e) {
 socket.onmessage = function (event) {
     console.log('[message] Data received from server: ' + event.data);
     switch (event.data.split(",")[0]) {
-        case "0":
+        case "0": //Initial handshake
             console.log('Player connected and waiting.');
             loadingScreen();
             break;
-        case "1":
-            console.log('Game started and running.')
+        case "1": //Game started
+            console.log('Game started and running.');
             game();
             break;
         case "2": //Drawing categories and predictions
