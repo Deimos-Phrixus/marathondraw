@@ -55,8 +55,8 @@ function gameScreen() {
                 <p id="timer">60</p>
             </div>
             <div id="options">
-                <div onClick="skip()">
-                    <p>skip</p>
+                <div onClick="skip()" style="margin-right:10px;">
+                    <p>skip  </p>
                 </div>
                 <div onClick="quit()">
                     <p>quit</p>
