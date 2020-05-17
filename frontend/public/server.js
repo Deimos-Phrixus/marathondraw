@@ -44,6 +44,14 @@ socket.onmessage = function (event) {
             }
             countdownPaused = false;
             break;
+        case "3": //Current player has finished
+            console.log('Game started and running.');
+            waitingPlayersScreen();
+            break;    
+        case "4": //All players have finished
+            console.log('Finished for everyone.');
+            scoreboardScreen();
+            break;
     }
 };
 
