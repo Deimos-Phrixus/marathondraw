@@ -1,4 +1,8 @@
+var countdown;
+var countdownPaused = false;
+
 //Loading screen for matchmaking. https://codepen.io/aurer/pen/jEGbA
+
 function loadingScreen() {
     document.getElementById("container").innerHTML = `<!-- LOADING 4 -->
     <div class="loader loader--style4" title="3" id="loadingScreen">
@@ -29,6 +33,8 @@ function loadingScreen() {
 
 //Load main game UI
 function gameScreen() {
+
+    countdown = 60; // 60 seconds
     //Delete loadingscreen div before showing UI
     var ldscreen = document.getElementById('loadingScreen');
     ldscreen.parentNode.removeChild(ldscreen);
@@ -46,7 +52,7 @@ function gameScreen() {
                 <p id="todraw">draw: snake</p>
             </div>
             <div>
-                <p>60</p>
+                <p id="timer">60</p>
             </div>
             <div id="options">
                 <div onClick="skip()">
@@ -62,6 +68,9 @@ function gameScreen() {
     <footer>
         <p id="ai">snake?</p>
     </footer>`;
+
+    startCountdown();
+    updateCountdown();
 }
 
 
@@ -73,18 +82,38 @@ function changeToDraw(category) {
 
 //Asyncronous countdown
 //https://stackoverflow.com/questions/50041474/javascript-countdown-timer-for-hour-minutes-and-seconds-when-a-start-button-cli
-function countdownMatch(limit) {
-    // Countdown
-    var x = setInterval(function (limit) {
-        var seconds = Math.floor((limit % (1000 * 60)) / 1000);
+// function countdownMatch(limit) {
+//     // Countdown
+//     var x = setInterval(function (limit) {
+        
+//         countdown--;
 
-        document.getElementById("countdown").innerHTML = seconds;
+//         var seconds = Math.floor((limit % (1000 * 60)) / 1000);
 
-        // If the count down is finished, write some text
-        if (seconds < 0) {
-            socket.send("finish");
+//         document.getElementById("countdown").innerHTML = seconds;
+
+//         // If the count down is finished, write some text
+//         if (seconds < 0) {
+//             socket.send("finish");
+//         }
+//     }, 1000);
+// }
+
+function startCountdown() {
+    var interval = setInterval(function() { 
+        if (!countdownPaused) {
+            countdown--;
         }
+        if (countdown == 0) {
+            quit();
+            clearInterval(interval);
+        }
+        updateCountdown();
     }, 1000);
+}
+
+function updateCountdown() {
+    document.getElementById("timer").innerHTML = countdown;
 }
 
 //Ai reply in the footer
@@ -95,9 +124,11 @@ function aiReply(reply) {
 //Skip category
 function skip() {
     socket.send("skip");
+    // resetBackground();
 }
 
 //Quit game
-function skip() {
+function quit() {
     socket.send("finished");
+    // resetBackground();
 }

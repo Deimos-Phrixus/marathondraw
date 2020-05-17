@@ -44,38 +44,38 @@ async def handler(websocket, path, player, gameId):
     game.set_name(player, player_name)
     
     while True:
-        # try:
-        # Try to start the game if not started
-        if not game.started:
-            await websocket.send("0,Player connected and waiting.")
-            game.start()
-            print("connected and waiting")
-        elif not game.running:
-            game.running = True
-            await websocket.send("1,Game started")
-            await websocket.send("2,"+game.get_category(player))
-            print("game started")
-        if game.running: 
-            data = await websocket.recv()   
-            if game.started:
-                if data == "finished":
-                    game.finished()
-                elif data == "drawing":
-                    print("receiving drawing")
-                    dimensions = await websocket.recv()
-                    drawing_string = await websocket.recv()
-                    print("Image received with dimensions", dimensions)
-                    next_category, predicted = game.score_drawing(player, dimensions, drawing_string)
-                    await websocket.send("2,"+next_category+","+predicted)
-                    await websocket.send(game.get_info(player))
-                elif data == "skip":
-                    player.next_category();
-                    await websocket.send("2,"+game.get_category(player))
-            if game.all_finished():
-                game.reset()
-        # except:
-        #     print("except break")
-        #     break
+        try:
+            # Try to start the game if not started
+            if not game.started:
+                await websocket.send("0,Player connected and waiting.")
+                game.start()
+                print("connected and waiting")
+            elif not game.running:
+                game.running = True
+                await websocket.send("1,Game started")
+                await websocket.send("2,"+game.get_category(player))
+                print("game started")
+            if game.running: 
+                data = await websocket.recv()   
+                if game.started:
+                    if data == "finished":
+                        game.finished()
+                    elif data == "drawing":
+                        print("receiving drawing")
+                        dimensions = await websocket.recv()
+                        drawing_string = await websocket.recv()
+                        print("Image received with dimensions", dimensions)
+                        next_category, predicted = game.score_drawing(player, dimensions, drawing_string)
+                        await websocket.send("2,"+next_category+","+predicted)
+                        await websocket.send(game.get_info(player))
+                    elif data == "skip":
+                        player.next_category();
+                        await websocket.send("2,"+game.get_category(player))
+                if game.all_finished():
+                    game.reset()
+        except: ## Websocket Breaks. meaning connection lost
+            print("except break")
+            break
 
     print("Lost connection")
     try:
@@ -84,7 +84,7 @@ async def handler(websocket, path, player, gameId):
     except:
         pass
     idCount -= 1
-
+    
 
 while True:
     idCount += 1

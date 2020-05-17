@@ -42,6 +42,7 @@ socket.onmessage = function (event) {
                 }
                 changeToDraw(code2[1]);
             }
+            countdownPaused = false;
             break;
     }
 };

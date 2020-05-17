@@ -91,9 +91,13 @@ function compressPixels() {
 
 function keyPressed() {
     if (keyCode == ENTER) {
-        aiReply("thinking...");
+        // document.getElementById("ai").innerHTML = "thinking...";
+        // countdownPaused = true;
+        // document.getElementById("ai").innerHTML = "thinking...";
+        console.log("update request sent");
 
         var compressedPixels = compressPixels();
+        console.log("compressed");
         if (socket.readyState == 1) {
             socket.send("drawing");
             socket.send(Math.abs(rx - lx) + "," + Math.abs(by - uy));
