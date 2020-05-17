@@ -91,20 +91,18 @@ function compressPixels() {
 
 function keyPressed() {
     if (keyCode == ENTER) {
-        // document.getElementById("ai").innerHTML = "thinking...";
-        // countdownPaused = true;
-        // document.getElementById("ai").innerHTML = "thinking...";
-        console.log("update request sent");
-
-        var compressedPixels = compressPixels();
-        console.log("compressed");
-        if (socket.readyState == 1) {
-            socket.send("drawing");
-            socket.send(Math.abs(rx - lx) + "," + Math.abs(by - uy));
-            // console.log(width + ","+ height);        
-            socket.send(compressedPixels.toString());
-            // console.log(compressedPixels.toString());        
-        }
+        aiReply("thinking...");
+        countdownPaused = true;
+        setTimeout(function() {
+            var compressedPixels = compressPixels(); //Don't move. Breaks connection.
+            if (socket.readyState == 1) {
+                socket.send("drawing");
+                socket.send(Math.abs(rx - lx) + "," + Math.abs(by - uy));
+                // console.log(width + ","+ height);        
+                socket.send(compressedPixels.toString());
+                // console.log(compressedPixels.toString());        
+            }
+        }, 300);
         // here it should check if things are correct and if so
         // update to tell user to draw the category
         // if it isn't shows error message.
