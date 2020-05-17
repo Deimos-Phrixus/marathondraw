@@ -28,7 +28,7 @@ class ClassficicationModel:
         predictions = self.model.predict(input_img)[0]
         print("thoughts", self.categories[np.argmax(predictions)])
         print("for", category, category_, "probability", predictions[category_])
-        return predictions[category_] > np.percentile(predictions, 98)
+        return predictions[category_] > np.percentile(predictions, 98), self.categories[np.argmax(predictions)][:-4]
 
     def reshape_img(self, input_img):
         """

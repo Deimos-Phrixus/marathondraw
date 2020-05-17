@@ -27,9 +27,20 @@ socket.onmessage = function (event) {
             console.log('Game started and running.')
             game();
             break;
-        case "2":
-            console.log(event.data.split(",")[1] + " needs to be drawn");
-            changeToDraw(event.data.split(",")[1])
+        case "2": //Drawing categories and predictions
+            var code2 = event.data.split(",");
+
+            if (code2[1] == "") {
+                aiReply(code2[2] + "?")
+            } else {
+                if (code2.length == 3) {
+                    aiReply("Correct!");
+                    resetBackground();
+                } else {
+                    aiReply("Draw bitch!");
+                }
+                changeToDraw(code2[1]);
+            }
             break;
     }
 };

@@ -26,6 +26,10 @@ function changeToDraw(category) {
     toDraw.innerHTML = category;
 }
 
+//Ai reply in the footer
+function aiReply(reply) {
+    document.getElementById("ai").innerHTML = reply;
+}
 function game() {
     var imported = document.createElement('script');
     imported.src = 'libraries/p5.js';

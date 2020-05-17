@@ -130,15 +130,17 @@ class Game:
 
         score = 0
         next_category = ""
+        
         # Add condition to pass into the model the category and the drawing array to get True or False
-        if(self.game_model.predict_category(drawing, self.categories[player.category_index])):
-            print("IT IS TRUE")
+        prediction = self.game_model.predict_category(drawing, self.categories[player.category_index])
+        if(prediction[0]):
+            print("It is CORRECT!")
             score = 1
             player.increase_score(score)
             player.next_category()
             next_category = self.get_category(player)
 
-        return next_category
+        return next_category, prediction[1]
 
     def get_info(self, player):
         """
