@@ -1,11 +1,13 @@
-body{
+body {
     background: #2f2f2f;
     text-align: center;
 }
-#container{
-    margin-top:25vh;
+
+#container {
+    margin-top: 25vh;
 }
-button{
+
+button {
     font-family: "Segoe UI Light";
     font-size: 6em;
     margin-bottom: 4vh;
@@ -20,69 +22,66 @@ button{
     color: blanchedalmond;
     cursor: pointer;
 }
-#play > button{
+
+#play > button {
     background: #9932cc;
 }
-#aboutus > button{
+
+#aboutus > button {
     background: #00ada3;
 }
 
 /*Original rainbow button code from https://codepen.io/althi/pen/eKdmaa, by Thiago Marques*/
-#play > button:hover{
+#play > button:hover {
     color: black;
-   background-image:     linear-gradient(
-      to right, 
-      #E7484F,
-      #E7484F 16.65%,
-      #F68B1D 16.65%,
-      #F68B1D 33.3%,
-      #FCED00 33.3%,
-      #FCED00 49.95%,
-      #009E4F 49.95%,
-      #009E4F 66.6%,
-      #00AAC3 66.6%,
-      #00AAC3 83.25%,
-      #732982 83.25%,
-      #732982 100%,
-      #E7484F 100%
-     
-     
-     
-    );
-  animation:slidebg 1s linear infinite;
+    background-image: linear-gradient(to right,
+            #E7484F,
+            #E7484F 16.65%,
+            #F68B1D 16.65%,
+            #F68B1D 33.3%,
+            #FCED00 33.3%,
+            #FCED00 49.95%,
+            #009E4F 49.95%,
+            #009E4F 66.6%,
+            #00AAC3 66.6%,
+            #00AAC3 83.25%,
+            #732982 83.25%,
+            #732982 100%,
+            #E7484F 100%);
+    animation: slidebg 1s linear infinite;
 }
-#aboutus > button:hover{
+
+#aboutus > button:hover {
     color: white;
-   background-image:     linear-gradient(
-      to right, 
-      #0965BA,
-      #0A9CC4 16.65%,
-      #0985BA 16.65%,
-      #0A9CC4 33.3%,
-      #00ADA3 33.3%,
-      #00ADAF 49.95%,
-      #00AD00 49.95%,
-      #009E4F 66.6%,
-      #09BA4D 66.6%,
-      #0AC486 83.25%,
-      #732982 83.25%,
-      #732982 100%,
-      #0965BA 100%
-    );
-  animation:slidebg 1s linear infinite;
+    background-image: linear-gradient(to right,
+            #0965BA,
+            #0A9CC4 16.65%,
+            #0985BA 16.65%,
+            #0A9CC4 33.3%,
+            #00ADA3 33.3%,
+            #00ADAF 49.95%,
+            #00AD00 49.95%,
+            #009E4F 66.6%,
+            #09BA4D 66.6%,
+            #0AC486 83.25%,
+            #732982 83.25%,
+            #732982 100%,
+            #0965BA 100%);
+    animation: slidebg 1s linear infinite;
 }
+
 @keyframes slidebg {
-  to {
-    background-position:20vw;
-  }
+    to {
+        background-position: 20vw;
+    }
 }
 
-.follow{
-  margin-top: 40px;
+.follow {
+    margin-top: 40px;
 }
 
-.follow a{
-  color: black;
-  padding: 8px 16px;
-  text-decoration: none;
+.follow a {
+    color: black;
+    padding: 8px 16px;
+    text-decoration: none;
 }

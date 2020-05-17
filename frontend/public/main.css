@@ -1,23 +1,26 @@
-body{
+body {
     font-family: "Segoe UI Light";
     background: #2f2f2f;
     width: 100vw;
     padding: 0px;
     overflow-x: hidden;
     text-align: center;
-    color: #878787;
+    color: #DFDFDF;
 }
-p{
+
+p {
     width: 100%;
     height: 100%;
     margin: auto;
 }
-#topUI{
+
+#topUI {
     width: 99%;
     left: 0px;
     top: 0px;
 }
-#info{
+
+#info {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     width: 100%;
@@ -25,21 +28,25 @@ p{
     z-index: 99;
     background-color: #3e3e3e;
 }
-#info > div{
+
+#info > div {
     margin: auto;
 }
-#options{
+
+#options {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
 }
+
 #options > div:hover {
     cursor: pointer;
 }
 
-.p5Canvas{
+.p5Canvas {
     z-index: -999;
 }
-footer{
+
+footer {
     height: 5vh;
     background-color: #9932cc;
     position: fixed;
@@ -47,7 +54,8 @@ footer{
     bottom: 0;
     width: 100%;
 }
-footer > p{
+
+footer > p {
     padding: 1vh;
     color: white;
 }
