@@ -23,7 +23,23 @@ function loadingScreen() {
 
 function changeToDraw(category) {
     var toDraw = document.getElementById("todraw");
-    toDraw.innerHTML = category;
+    toDraw.innerHTML = "draw: " + category;
+}
+
+//Asyncronous countdown
+//https://stackoverflow.com/questions/50041474/javascript-countdown-timer-for-hour-minutes-and-seconds-when-a-start-button-cli
+function countdownMatch(limit) {
+    // Countdown
+    var x = setInterval(function (limit) {
+        var seconds = Math.floor((limit % (1000 * 60)) / 1000);
+
+        document.getElementById("countdown").innerHTML = seconds;
+
+        // If the count down is finished, write some text
+        if (seconds < 0) {
+            socket.send("finish");
+        }
+    }, 1000);
 }
 
 //Ai reply in the footer
