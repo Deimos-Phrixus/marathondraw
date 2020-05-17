@@ -7,7 +7,8 @@ var canvas;
 var lx, rx, ty, by;
 
 function windowResized() {
-  resizeCanvas(window.innerWidth, window.innerHeight);
+    resizeCanvas(window.innerWidth, window.innerHeight);
+    resetBackground()
 }
 
 function setup() {
@@ -106,10 +107,22 @@ function keyPressed() {
         socket.send(Math.abs(rx-lx) + "," + Math.abs(by-uy));
         // console.log(width + ","+ height);        
         socket.send(compressedPixels.toString());
-        // console.log(compressedPixels.toString());        
+    if (keyCode == ENTER) {
+        aiReply("thinking...");
+        var compressedPixels = compressPixels();
+        if (socket.readyState == 1) {
+            socket.send("drawing");
+            socket.send(Math.abs(rx - lx) + "," + Math.abs(by - uy));
+            // console.log(width + ","+ height);        
+            socket.send(compressedPixels.toString());
+            // console.log(compressedPixels.toString());        
+        }
+        // here it should check if things are correct and if so
+        // update to tell user to draw the category
+        // if it isn't shows error message.
     }
-    // here it should check if things are correct and if so
-    // update to tell user to draw the category
-    // if it isn't shows error message.
-  }
+}
+
+function resetBackground() {
+    background('#000000');
 }
