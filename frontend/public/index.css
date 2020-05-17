@@ -10,7 +10,7 @@ body {
 button {
     font-family: "Segoe UI Light";
     font-size: 6em;
-    margin-bottom: 4vh;
+    margin-bottom: 2vh;
     width: 30vw;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -19,12 +19,21 @@ button {
     padding-bottom: 10px;
     border-radius: 8px;
     border: 0px;
-    color: blanchedalmond;
+    color: #F2F4F4;
     cursor: pointer;
 }
 
 #play > button {
     background: #9932cc;
+}
+
+#nicknameBox {
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 6vh;
+    width: 28vw;
+    border-radius: 8px;
+    border: 0px;
 }
 
 #aboutus > button {
