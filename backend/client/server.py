@@ -43,6 +43,7 @@ async def handler(websocket, path, player, gameId):
     player_name = ''.join(name.split(",")[1:]) # doing a join for case of player using ',' in there name
     game.set_name(player, player_name)
     
+    #Implement code to keep the game alive even if one player loses connection.
     while True:
         try:
             # Try to start the game if not started
@@ -55,11 +56,13 @@ async def handler(websocket, path, player, gameId):
                 await websocket.send("1,Game started")
                 await websocket.send("2,"+game.get_category(player))
                 print("game started")
+                
             if game.running: 
                 data = await websocket.recv()   
                 if game.started:
                     if data == "finished":
-                        game.finished()
+                        await websocket.send("3,"+game.get_info())
+                        game.finished(player)
                     elif data == "drawing":
                         print("receiving drawing")
                         dimensions = await websocket.recv()
@@ -67,13 +70,15 @@ async def handler(websocket, path, player, gameId):
                         print("Image received with dimensions", dimensions)
                         next_category, predicted = game.score_drawing(player, dimensions, drawing_string)
                         await websocket.send("2,"+next_category+","+predicted)
-                        await websocket.send(game.get_info(player))
+                        await websocket.send(game.get_info())
                     elif data == "skip":
                         player.next_category();
                         await websocket.send("2,"+game.get_category(player))
+                        
                 if game.all_finished():
+                    await websocket.send("4,"+game.get_info())
                     game.reset()
-        except: ## Websocket Breaks. meaning connection lost
+        except ConnectionClosed: ## Websocket Breaks. meaning connection lost
             print("except break")
             break
 
