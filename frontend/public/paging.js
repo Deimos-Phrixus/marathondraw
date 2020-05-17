@@ -27,6 +27,44 @@ function loadingScreen() {
     </div>`;
 }
 
+//Load main game UI
+function gameScreen() {
+    //Delete loadingscreen div before showing UI
+    var ldscreen = document.getElementById('loadingScreen');
+    ldscreen.parentNode.removeChild(ldscreen);
+
+    var imported = document.createElement('script');
+    imported.src = 'libraries/p5.js';
+    document.head.appendChild(imported);
+    imported = document.createElement('script');
+    imported.src = 'drawing.js';
+    document.head.appendChild(imported);
+
+    document.getElementById("container").innerHTML = `<div id="topUI">
+        <div id="info">
+            <div>
+                <p id="todraw">draw: snake</p>
+            </div>
+            <div>
+                <p>60</p>
+            </div>
+            <div id="options">
+                <div onClick="skip()">
+                    <p>skip</p>
+                </div>
+                <div onClick="quit()">
+                    <p>quit</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="paint"></div>
+    <footer>
+        <p id="ai">snake?</p>
+    </footer>`;
+}
+
+
 //Change category to draw
 function changeToDraw(category) {
     var toDraw = document.getElementById("todraw");
@@ -54,43 +92,12 @@ function aiReply(reply) {
     document.getElementById("ai").innerHTML = reply;
 }
 
-//SKip category
+//Skip category
 function skip() {
     socket.send("skip");
 }
 
-//Load main game UI
-function game() {
-    var imported = document.createElement('script');
-    imported.src = 'libraries/p5.js';
-    document.head.appendChild(imported);
-    imported = document.createElement('script');
-    imported.src = 'drawing.js';
-    document.head.appendChild(imported);
-
-    document.getElementById("container").innerHTML = `<div id="topUI">
-        <div id="info">
-            <div>
-                <p id="todraw">draw: snake</p>
-            </div>
-            <div>
-                <p>60</p>
-            </div>
-            <div id="options">
-                <div>
-                    <p>erase</p>
-                </div>
-                <div onClick="skip()">
-                    <p>skip</p>
-                </div>
-                <div>
-                    <p>quit</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="paint"></div>
-    <footer>
-        <p id="ai">snake?</p>
-    </footer>`;
+//Quit game
+function skip() {
+    socket.send("finished");
 }
