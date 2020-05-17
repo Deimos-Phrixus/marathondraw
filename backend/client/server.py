@@ -68,6 +68,9 @@ async def handler(websocket, path, player, gameId):
                     next_category, predicted = game.score_drawing(player, dimensions, drawing_string)
                     await websocket.send("2,"+next_category+","+predicted)
                     await websocket.send(game.get_info(player))
+                elif data == "skip":
+                    player.next_category();
+                    await websocket.send("2,"+game.get_category(player))
             if game.all_finished():
                 game.reset()
         # except:

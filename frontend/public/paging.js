@@ -30,6 +30,13 @@ function changeToDraw(category) {
 function aiReply(reply) {
     document.getElementById("ai").innerHTML = reply;
 }
+
+//SKip category
+function skip() {
+    socket.send("skip");
+}
+
+//Load main game UI
 function game() {
     var imported = document.createElement('script');
     imported.src = 'libraries/p5.js';
@@ -50,7 +57,7 @@ function game() {
                 <div>
                     <p>erase</p>
                 </div>
-                <div>
+                <div onClick="skip()">
                     <p>skip</p>
                 </div>
                 <div>
