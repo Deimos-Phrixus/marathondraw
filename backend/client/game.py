@@ -142,30 +142,23 @@ class Game:
 
         return next_category, prediction[1]
 
-    def get_info(self, player):
+    def get_info(self):
         """
-        Get the category the player is supposed to draw
-        and the current scores of all the players.
-        :param player: The player
+        Get the name and score of the players.
         """
-        if self.all_finished():
-            return "Game finished."
-        else:
-            category = self.get_category(player)
+        temp = []
+        for key in self.players:
+            temp.append(self.players[key].name)
+        names = ","
+        names = names.join(temp)
 
-            temp = []
-            for key in self.players:
-                temp.append(self.players[key].name)
-            names = ","
-            names = names.join(temp)
+        temp = []
+        for key in self.players:
+            temp.append(str(self.players[key].score))
+        scores = ","
+        scores = scores.join(temp)
 
-            temp = []
-            for key in self.players:
-                temp.append(str(self.players[key].score))
-            scores = ","
-            scores = scores.join(temp)
-
-            return f"{category},{names},{scores}"
+        return f"{names},{scores}"
 
     def start(self):
         """
