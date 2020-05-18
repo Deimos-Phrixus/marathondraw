@@ -1,10 +1,23 @@
-import asyncio
-import websockets
+# import asyncio
+import socket
 import functools
 from _thread import *
 import pickle
 from .game import Game, Player
 import sys
+
+ip = '127.0.0.1'
+port = 5555
+server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+try:
+    server.bind((ip, port))
+except socket.error as e:
+    str(e)
+
+server.listen()
+print("Waiting for a connection, Server Started")
+
 
 NUMBER_OF_PLAYERS = 3
 
@@ -12,39 +25,44 @@ connected = set()
 games = {}
 idCount = 0
 
-async def handler(websocket, path, player, gameId):
+def handler(conn, player=None, gameId=None):
     """
     Handle the client.
-    :param websocket:
-    :param path:
+    :param conn: Connection with client
     :param player: The player.
     :param gameId: The game id.
     """
     global idCount
     global games
+
     # Send the player the player id.
-    #await websocket.send(str.encode(str(player.id)))
-    await websocket.send("Player #"+str(player.id))
+    conn.send(str.encode("Player #"+str(player.id)))
     # Add the player to the game.
     if gameId in games:
         game = games[gameId]
     else:
         print("Room connection error. The room got deleted?")
-        await websocket.send("Connection lost. Server error")
+        conn.send(str.encode("Connection lost. Server error"))
         return
     
     game.add_player(player)
+    dc = 0
+    while dc < 10:
+        name = conn.recv(4096*10)# "name,<actual_name>"
+        print(name.decode())
+        print(name)
+        dc += 1
+    # print(help(type(name)))
 
-    name = await websocket.recv() # "name,<actual_name>"
     if name.split(",")[0] != "name":
-        await websocket.send("Wrong format. Loosing connection")
+        conn.send(str.encode("Wrong format. Loosing connection"))
         print("Ending connection for incorrect format")
         return
     player_name = ''.join(name.split(",")[1:]) # doing a join for case of player using ',' in there name
     game.set_name(player, player_name)
     
     # only send once before getting in the main loop
-    await websocket.send("0,Player connected and waiting.")
+    conn.send(str.encode("0,Player connected and waiting."))
 
     #Implement code to keep the game alive even if one player loses connection.
     while True:
@@ -54,32 +72,35 @@ async def handler(websocket, path, player, gameId):
                 game.start()
             elif not game.running:
                 game.running = True
-                await websocket.send("1,Game started")
-                await websocket.send("2,"+game.get_category(player))
+                conn.send(str.encode("1,Game started"))
+                conn.send(str.encode("2,"+game.get_category(player)))
                 print("game started")
                 
             if game.running: 
-                data = await websocket.recv()   
+                data = conn.recv(4096*10)#.decode() # alright lets see
+                print(data)
+                data = data.decode()
+                print(data)
                 if game.started:
                     if data == "finished":
-                        await websocket.send("3,"+game.get_info())
+                        conn.send(str.encode("3,"+game.get_info()))
                         game.finished(player)
                     elif data == "drawing":
                         print("receiving drawing")
-                        dimensions = await websocket.recv()
-                        drawing_string = await websocket.recv()
+                        dimensions = conn.recv()
+                        drawing_string = conn.recv()
                         print("Image received with dimensions", dimensions)
                         next_category, predicted = game.score_drawing(player, dimensions, drawing_string)
-                        await websocket.send("2,"+next_category+","+predicted)
-                        await websocket.send(game.get_info())
+                        conn.send(str.encode("2,"+next_category+","+predicted))
+                        conn.send(str.encode(game.get_info()))
                     elif data == "skip":
                         player.next_category();
-                        await websocket.send("2,"+game.get_category(player))
+                        conn.send(str.encode("2,"+game.get_category(player)))
                         
                 if game.all_finished():
-                    await websocket.send("4,"+game.get_info())
+                    conn.send(str.encode("4,"+game.get_info()))
                     game.reset()
-        except ConnectionClosed: ## Websocket Breaks. meaning connection lost
+        except:
             print("except break")
             break
 
@@ -93,21 +114,19 @@ async def handler(websocket, path, player, gameId):
     
 def start_server():
     global idCount
+    global server
+
     while True:
+        conn,addr = server.accept()
+        print("Connected to: ", addr)
+        
         idCount += 1
         playerId = (idCount - 1) % NUMBER_OF_PLAYERS + 1
         player = Player(playerId)
         gameId = (idCount - 1)//NUMBER_OF_PLAYERS
-        #if not (idCount % NUMBER_OF_PLAYERS == 0):
-            #games[gameId] = Game(gameId, NUMBER_OF_PLAYERS)
-            #print("Creating a new game...")
-            
-        games[gameId] = Game(gameId, NUMBER_OF_PLAYERS)
-        print("Creating a new game...")
-        
-        asyncio.get_event_loop().run_until_complete(
-            websockets.serve(
-                functools.partial(handler, player = player, gameId = gameId), 'localhost', 5555, max_size = 2**25))
-        asyncio.get_event_loop().run_forever()
+        if idCount % NUMBER_OF_PLAYERS == 1:
+            games[gameId] = Game(gameId, NUMBER_OF_PLAYERS)
+            print("Creating a new game...")
+        start_new_thread(handler, (conn,player,gameId))
 
 start_server()
