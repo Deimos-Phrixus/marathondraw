@@ -1,15 +1,15 @@
 import os
-# import random
 import tensorflow as tf
 import numpy as np
 from matplotlib import pyplot as plt
-
 from PIL import Image
+from settings import BASE_DIR
+os.chdir(BASE_DIR)
 
 class ClassficicationModel:
 
     def __init__(self, model_name="model_opt.h5"):
-        # print(os.listdir())
+        print(os.listdir())
         self.model = tf.keras.models.load_model("backend/model/model_opt.h5")
         self.categories = list(np.load("backend/model/categories.npz")['categories'])
 

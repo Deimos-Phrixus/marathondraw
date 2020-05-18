@@ -1,8 +1,7 @@
 import numpy as np
 from matplotlib import pyplot as plt
 import random
-from sklearn import preprocessing
-from model import *
+from .model import *
 class Player:
 
     def __init__(self, id):
