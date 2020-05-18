@@ -6,7 +6,7 @@ import pickle
 from game import Game, Player
 import sys
 
-NUMBER_OF_PLAYERS = 1
+NUMBER_OF_PLAYERS = 3
 
 connected = set()
 games = {}
@@ -43,14 +43,15 @@ async def handler(websocket, path, player, gameId):
     player_name = ''.join(name.split(",")[1:]) # doing a join for case of player using ',' in there name
     game.set_name(player, player_name)
     
+    # only send once before getting in the main loop
+    await websocket.send("0,Player connected and waiting.")
+
     #Implement code to keep the game alive even if one player loses connection.
     while True:
         try:
             # Try to start the game if not started
             if not game.started:
-                await websocket.send("0,Player connected and waiting.")
                 game.start()
-                print("connected and waiting")
             elif not game.running:
                 game.running = True
                 await websocket.send("1,Game started")
