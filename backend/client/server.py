@@ -3,7 +3,7 @@ import websockets
 import functools
 from _thread import *
 import pickle
-from game import Game, Player
+from .game import Game, Player
 import sys
 
 NUMBER_OF_PLAYERS = 3
@@ -91,20 +91,23 @@ async def handler(websocket, path, player, gameId):
         pass
     idCount -= 1
     
-
-while True:
-    idCount += 1
-    playerId = (idCount - 1) % NUMBER_OF_PLAYERS + 1
-    player = Player(playerId)
-    gameId = (idCount - 1)//NUMBER_OF_PLAYERS
-    #if not (idCount % NUMBER_OF_PLAYERS == 0):
-        #games[gameId] = Game(gameId, NUMBER_OF_PLAYERS)
-        #print("Creating a new game...")
+def start_server():
+    global idCount
+    while True:
+        idCount += 1
+        playerId = (idCount - 1) % NUMBER_OF_PLAYERS + 1
+        player = Player(playerId)
+        gameId = (idCount - 1)//NUMBER_OF_PLAYERS
+        #if not (idCount % NUMBER_OF_PLAYERS == 0):
+            #games[gameId] = Game(gameId, NUMBER_OF_PLAYERS)
+            #print("Creating a new game...")
+            
+        games[gameId] = Game(gameId, NUMBER_OF_PLAYERS)
+        print("Creating a new game...")
         
-    games[gameId] = Game(gameId, NUMBER_OF_PLAYERS)
-    print("Creating a new game...")
-    
-    asyncio.get_event_loop().run_until_complete(
-        websockets.serve(
-            functools.partial(handler, player = player, gameId = gameId), 'localhost', 5555, max_size = 2**25))
-    asyncio.get_event_loop().run_forever()
+        asyncio.get_event_loop().run_until_complete(
+            websockets.serve(
+                functools.partial(handler, player = player, gameId = gameId), 'localhost', 5555, max_size = 2**25))
+        asyncio.get_event_loop().run_forever()
+
+start_server()

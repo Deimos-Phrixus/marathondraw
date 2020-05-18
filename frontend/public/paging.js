@@ -12,20 +12,20 @@ function loadingScreen() {
           <animateTransform  attributeType="xml"
             attributeName="transform" type="scale"
             values="1,1; 1,3; 1,1"
-            begin="0s" dur="0.6s" repeatCount="indefinite" />       
+            begin="0s" dur="0.6s" repeatCount="indefinite" />
         </rect>
 
         <rect x="10" y="0" width="4" height="7" fill="#fff">
           <animateTransform  attributeType="xml"
             attributeName="transform" type="scale"
             values="1,1; 1,3; 1,1"
-            begin="0.2s" dur="0.6s" repeatCount="indefinite" />       
+            begin="0.2s" dur="0.6s" repeatCount="indefinite" />
         </rect>
         <rect x="20" y="0" width="4" height="7" fill="#fff">
           <animateTransform  attributeType="xml"
             attributeName="transform" type="scale"
             values="1,1; 1,3; 1,1"
-            begin="0.4s" dur="0.6s" repeatCount="indefinite" />       
+            begin="0.4s" dur="0.6s" repeatCount="indefinite" />
         </rect>
       </svg>
       <h3> Finding Players ... </h3>
