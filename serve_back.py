@@ -3,7 +3,7 @@ import websockets
 import functools
 from _thread import *
 import pickle
-from backend.client.game import Game, Player
+from backend.game import Game, Player
 import sys
 from multiprocessing import Pool
 
@@ -14,6 +14,15 @@ idCount = 0
 gameId = 0
 
 async def message_handler(websocket, data, player, game):
+    """
+    Message handler. Takes message recieved from client and
+    inokes appropriate change in the game.
+
+    :param websocket: websocket object to communicate with client
+    :param data: message recieved
+    :param player: player object of the client
+    :param game: game player is in
+    """
     if data == "finished":
         await websocket.send("3, wait for all players to finish")
         game.finished(player)
@@ -29,24 +38,36 @@ async def message_handler(websocket, data, player, game):
         player.next_category()
         await websocket.send("2,"+game.get_category(player))
     
-def start_game(game, playerId):
+def start_game(game):
+    """
+    Loops until game is started.
+
+    :param game: game instance that needs to start
+    """
     while not game.started:
         game.start()
     
-def finish_game(game, gameId):
+def finish_game(game):
+    """
+    Loops until game finishes.
+
+    :param game: game instance that needs to finish
+    """
+    print("Lost a connection abruptly")
     while not game.all_finished():
         pass
 
-    idCount -= NUMBER_OF_PLAYERS
-    del games[gameId]
-
-
 async def handler(websocket, path):
+    """
+    Handler for each client connection.
+
+    :websocket: object to communicate with client
+    :path: path of the url at which player connected from
+    """
     await asyncio.sleep(1)
 
     global idCount
     global games
-    global connected
     global gameId
 
     idCount += 1
@@ -67,28 +88,42 @@ async def handler(websocket, path):
             del games[gameId]
         idCount -= 1
         return
+
     game = games[gameId]
     player_name = ''.join(name.split(",")[1:])
     game.add_player(player)
-    connected.append(remote_ip)
     game.set_name(player, player_name)
     
-    await asyncio.get_event_loop().run_in_executor(None, functools.partial(start_game, game = game, playerId=playerId))
+    await websocket.send("0,waiting for players")
+    await asyncio.get_event_loop().run_in_executor(None, functools.partial(start_game, game = game))
     
     if game.started:
-        await websocket.send("1, Game starting")
+        await websocket.send("1,Game starting")
         await websocket.send("2,"+game.get_category(player))
     
     async for message in websocket:
         await message_handler(websocket, message, player, game)
+        if player.finished:
+            break
         if game.all_finished():
             break
     
+    ## if any player looses connection when trying to start game
+    if not game.started:
+        pass ## we should add handling for this
+
+    game.finished(player)
     if not game.all_finished():
-        await websocket.send("4,"+game.get_info())
-    else:
-        await asyncio.get_event_loop().run_in_executor(None, functools.partial(finish_game, game=game, gameId=gameId))
-    
+        await asyncio.get_event_loop().run_in_executor(None, functools.partial(finish_game, game=game))
+    print("For player", idCount, "printed")
+    await websocket.send("4,"+str(NUMBER_OF_PLAYERS)+","+game.get_info())
+    try:
+        del games[gameId]
+        idCount -= NUMBER_OF_PLAYERS
+    except KeyError:
+        print("failed to remove")
+        pass
+
 # def start_server():
 if __name__ == "__main__":
     asyncio.get_event_loop().run_until_complete(
