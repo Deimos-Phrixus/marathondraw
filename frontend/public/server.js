@@ -50,7 +50,8 @@ socket.onmessage = function (event) {
             break;    
         case "4": //All players have finished
             console.log('Finished for everyone.');
-            scoreboardScreen();
+            scoreboardScreen(event.data);
+            console.log(event.data);
             break;
     }
 };

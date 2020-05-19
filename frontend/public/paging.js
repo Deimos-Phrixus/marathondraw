@@ -3,7 +3,26 @@ var countdownPaused = false;
 
 //Loading screen for matchmaking. https://codepen.io/aurer/pen/jEGbA
 
-function loadingScreen() {
+function waitingPlayersScreen() {
+    loadSvg("Wait for others to finish...");
+}
+
+function scoreboardScreen(data) {
+    // 4, 4, 3,4,5,6, 2,3,4,5
+    data = data.split(",")
+    winner = data[2];
+    htmlString = `
+        <div>
+        <h1> Winner: ` + winner + ` </h1>`
+    for (var i = 0; i < int(data[1]); i+=1) {
+        htmlString += "<p> " + data[2+i] + " : " + data[2+int(data[1])+i] + " </p>";
+    }
+    htmlString += `<a href="/">Play agian? </a>`
+    htmlString += "</div>"
+    document.getElementById("container").innerHTML = htmlString;
+}
+
+function loadSvg(msg) {
     document.getElementById("container").innerHTML = `<!-- LOADING 4 -->
     <div class="loader loader--style4" title="3" id="loadingScreen">
       <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
@@ -28,13 +47,15 @@ function loadingScreen() {
             begin="0.4s" dur="0.6s" repeatCount="indefinite" />
         </rect>
       </svg>
-      <h3> Finding Players ... </h3>
-    </div>`;
+      <h3>` + msg + "</h3></div>";
+}
+function loadingScreen() {
+    loadSvg("Finding Plaeyrs...")
 }
 
 //Load main game UI
 function gameScreen() {
-
+    console.log("Initialising game screen");
     countdown = 60; // 60 seconds
     //Delete loadingscreen div before showing UI
     var ldscreen = document.getElementById('loadingScreen');

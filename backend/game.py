@@ -33,6 +33,19 @@ class Player:
         self.ready = False
         self.finished = False
 
+    
+    def __lt__(self, other):
+        return self.score > other.score
+    
+    def __gt__(self, other):
+        return self.score < other.score
+    
+    def __lte__(self, other):
+        return self.score >= other.score
+
+    def __gte__(self, other):
+        return self.score <= other.score
+
 
 class Game:
     def __init__(self, id, number_of_players):
@@ -145,15 +158,20 @@ class Game:
         """
         Get the name and score of the players.
         """
+        players = []
+        for each in self.players.values():
+            players.append(each)
+
+        players = sorted(players)
         temp = []
-        for key in self.players:
-            temp.append(self.players[key].name)
+        for each in players:
+            temp.append(each.name)
         names = ","
         names = names.join(temp)
 
         temp = []
-        for key in self.players:
-            temp.append(str(self.players[key].score))
+        for each in players:
+            temp.append(str(each.score))
         scores = ","
         scores = scores.join(temp)
 
