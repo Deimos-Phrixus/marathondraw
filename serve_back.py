@@ -31,6 +31,10 @@ async def message_handler(websocket, data, player, game):
     elif data == "skip":
         player.next_category()
         await websocket.send("2,"+game.get_category(player))
+    
+    if game.all_finished():
+        websocket.send("4,"+game.get_info())
+        game.reset()
 
 def start_game(game, playerId):
     # c = 0
@@ -79,7 +83,11 @@ async def handler(websocket, path):
     
     print("lost connection? ")
     idCount -= 1
-
+    try:
+        del games[gameId]
+        print("Closing Game", gameId)
+    except:
+        pass
     
 # def start_server():
 if __name__ == "__main__":
