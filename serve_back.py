@@ -9,16 +9,13 @@ from multiprocessing import Pool
 
 NUMBER_OF_PLAYERS = 3
 
-connected = set()
 games = {}
 idCount = 0
-
-def callback():
-    pass
+gameId = 0
 
 async def message_handler(websocket, data, player, game):
     if data == "finished":
-        await websocket.send("3,"+game.get_info())
+        await websocket.send("3, wait for all players to finish")
         game.finished(player)
     elif data == "drawing":
         print("receiving drawing")
@@ -32,29 +29,31 @@ async def message_handler(websocket, data, player, game):
         player.next_category()
         await websocket.send("2,"+game.get_category(player))
     
-    if game.all_finished():
-        websocket.send("4,"+game.get_info())
-        game.reset()
-
 def start_game(game, playerId):
-    # c = 0
     while not game.started:
         game.start()
-        # if c%100==0:
-        #     print("this is running for", playerId)
-        # c+= 0.5
+    
+def finish_game(game, gameId):
+    while not game.all_finished():
+        pass
+
+    idCount -= NUMBER_OF_PLAYERS
+    del games[gameId]
+
 
 async def handler(websocket, path):
     await asyncio.sleep(1)
 
     global idCount
     global games
+    global connected
+    global gameId
 
     idCount += 1
     playerId = (idCount - 1) % NUMBER_OF_PLAYERS + 1
     player = Player(playerId)
-    gameId = (idCount-1)// NUMBER_OF_PLAYERS
     if idCount % NUMBER_OF_PLAYERS == 1:
+        gameId += 1
         games[gameId] = Game(gameId, NUMBER_OF_PLAYERS)
         print("Creating a new game...")
     else:
@@ -71,23 +70,24 @@ async def handler(websocket, path):
     game = games[gameId]
     player_name = ''.join(name.split(",")[1:])
     game.add_player(player)
+    connected.append(remote_ip)
     game.set_name(player, player_name)
+    
     await asyncio.get_event_loop().run_in_executor(None, functools.partial(start_game, game = game, playerId=playerId))
-    print("this keeps happening", playerId)
+    
     if game.started:
         await websocket.send("1, Game starting")
         await websocket.send("2,"+game.get_category(player))
-      
+    
     async for message in websocket:
         await message_handler(websocket, message, player, game)
+        if game.all_finished():
+            break
     
-    print("lost connection? ")
-    idCount -= 1
-    try:
-        del games[gameId]
-        print("Closing Game", gameId)
-    except:
-        pass
+    if not game.all_finished():
+        await websocket.send("4,"+game.get_info())
+    else:
+        await asyncio.get_event_loop().run_in_executor(None, functools.partial(finish_game, game=game, gameId=gameId))
     
 # def start_server():
 if __name__ == "__main__":
