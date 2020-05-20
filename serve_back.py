@@ -46,7 +46,17 @@ def start_game(game):
     """
     while not game.started:
         game.start()
-    
+
+async def start_game_task(websocket, game):
+    while not game.started:
+        try:
+            data = await asyncio.wait_for(websocket.recv(), timeout=0.1)
+        except websockets.exceptions.ConnectionClosed:
+            break
+        except:
+            pass
+        game.start()
+
 def finish_game(game):
     """
     Loops until game finishes.
@@ -95,8 +105,9 @@ async def handler(websocket, path):
     game.set_name(player, player_name)
     
     await websocket.send("0,waiting for players")
-    await asyncio.get_event_loop().run_in_executor(None, functools.partial(start_game, game = game))
-    
+    # await asyncio.get_event_loop().run_in_executor(None, functools.partial(start_game, game = game))
+    task = asyncio.create_task(start_game_task(websocket=websocket, game=game))
+    await task
     if game.started:
         await websocket.send("1,Game starting")
         await websocket.send("2,"+game.get_category(player))
