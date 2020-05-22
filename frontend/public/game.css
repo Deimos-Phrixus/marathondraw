@@ -59,3 +59,32 @@ footer > p {
     padding: 1vh;
     color: white;
 }
+
+#scoreboard{
+    margin-top: 10vh;
+}
+#scoreboard > div{
+    margin: 0;
+    width: 98vw;
+}
+#trophy{
+    font-size: 4em;
+    font-weight: bold;
+}
+#trophy1{
+    font-size: 3em;
+    background: linear-gradient(90deg, rgba(17,27,29,1) 0%, rgba(11,138,214,1) 48%, rgba(0,212,255,1) 100%);
+}
+#trophy2{
+    font-size: 2em;
+    background: linear-gradient(60deg, rgba(35,170,172,1) 0%, rgba(16,216,218,1) 63%, rgba(255,255,255,1) 100%);
+}
+#trophy2{
+    font-size: 2em;
+    background: linear-gradient(60deg, rgba(170,170,170,1) 0%, rgba(255,255,255,1) 63%, rgba(255,255,255,1) 100%);
+}
+
+
+
+
+

@@ -8,17 +8,71 @@ function waitingPlayersScreen() {
 }
 
 function scoreboardScreen(data) {
+    BGchanger = `<script>
+        // Code brought and modified from 
+        // Ivang G. https://codepen.io/Zyxoman/pen/XZrJXz
+        
+        var x1 = 0;
+        var y1 = 0;
+        var z1 = 0;
+        var x2;
+        var y2;
+        var z2;
+        var x;
+        var y;
+        var z;
+        var i = 0;
+
+        function change() {
+            document.getElementById("trophy").style.backgroundColor = \`rgb(\${x},\${y},\${z})\`;
+        }
+
+        function looper(k) {
+            setTimeout(function() {
+                x = Math.round(x1 + (k % 25) * (x2 - x1) / 25);
+                y = Math.round(y1 + (k % 25) * (y2 - y1) / 25);
+                z = Math.round(z1 + (k % 25) * (z2 - z1) / 25);
+                change();
+                //  document.body.innerHTML+=\`\${k}\` +" " + \`rgb(\${x1},\${y1},\${z1})\`  +" "+\`rgb(\${x2},\${y2},\${z2})\`  +" "+\`rgb(\${x},\${y},\${z})\`+"<br>";
+            }, 0)
+            i++;
+            setTimeout(function() {
+                number();
+            }, 40)
+        }
+
+        function number() {
+            //if (i<1500) { 
+            if (i >= 0) {
+                if (i >= 25 && ((i % 25) == 0)) {
+                    x1 = x2;
+                    y1 = y2;
+                    z1 = z2;
+                }
+                if ((i % 25) == 0) {
+                    x2 = Math.round(Math.random() * 255);
+                    y2 = Math.round(Math.random() * 255);
+                    z2 = Math.round(Math.random() * 255);
+
+                }
+                looper(i);
+            }
+        }
+        number();
+
+    </script>`;
     // 4, 4, 3,4,5,6, 2,3,4,5
     data = data.split(",")
     winner = data[2];
+    htmlString = BGchanger;
     htmlString = `
-        <div>
-        <h1> Winner: ` + winner + ` </h1>`
+        <div id="scoreboard">
+        <div id="trophy"><h1>The winner is ` + winner + ` </h1></div>`;
     for (var i = 0; i < int(data[1]); i += 1) {
-        htmlString += "<p> " + data[2 + i] + " : " + data[2 + int(data[1]) + i] + " </p>";
+        htmlString += "<div id='trophy"+(i+1)+"'><p> " + data[2 + i] + " > " + data[2 + int(data[1]) + i] + " </p></div>";
     }
-    htmlString += `<a href="/">Play agian? </a>`
-    htmlString += "</div>"
+    htmlString += `<a href="/">Play again? </a>`;
+    htmlString += "</div>";
     document.getElementById("container").innerHTML = htmlString;
 }
 
