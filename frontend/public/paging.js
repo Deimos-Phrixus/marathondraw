@@ -14,8 +14,8 @@ function scoreboardScreen(data) {
     htmlString = `
         <div>
         <h1> Winner: ` + winner + ` </h1>`
-    for (var i = 0; i < int(data[1]); i+=1) {
-        htmlString += "<p> " + data[2+i] + " : " + data[2+int(data[1])+i] + " </p>";
+    for (var i = 0; i < int(data[1]); i += 1) {
+        htmlString += "<p> " + data[2 + i] + " : " + data[2 + int(data[1]) + i] + " </p>";
     }
     htmlString += `<a href="/">Play agian? </a>`
     htmlString += "</div>"
@@ -49,8 +49,9 @@ function loadSvg(msg) {
       </svg>
       <h3>` + msg + "</h3></div>";
 }
+
 function loadingScreen() {
-    loadSvg("Finding Plaeyrs...")
+    loadSvg("Finding Players...")
 }
 
 //Load main game UI
@@ -107,7 +108,7 @@ function changeToDraw(category) {
 // function countdownMatch(limit) {
 //     // Countdown
 //     var x = setInterval(function (limit) {
-        
+
 //         countdown--;
 
 //         var seconds = Math.floor((limit % (1000 * 60)) / 1000);
@@ -122,7 +123,7 @@ function changeToDraw(category) {
 // }
 
 function startCountdown() {
-    var interval = setInterval(function() { 
+    var interval = setInterval(function () {
         if (!countdownPaused) {
             countdown--;
         }

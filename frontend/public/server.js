@@ -47,7 +47,7 @@ socket.onmessage = function (event) {
         case "3": //Current player has finished
             console.log('Game started and running.');
             waitingPlayersScreen();
-            break;    
+            break;
         case "4": //All players have finished
             console.log('Finished for everyone.');
             scoreboardScreen(event.data);

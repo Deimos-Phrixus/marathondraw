@@ -93,7 +93,7 @@ function keyPressed() {
     if (keyCode == ENTER) {
         aiReply("thinking...");
         countdownPaused = true;
-        setTimeout(function() {
+        setTimeout(function () {
             var compressedPixels = compressPixels(); //Don't move. Breaks connection.
             if (socket.readyState == 1) {
                 socket.send("drawing");
