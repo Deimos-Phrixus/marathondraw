@@ -1,0 +1,77 @@
+<html>
+    <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="info.css">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <script>
+        var x1 = 0;
+        var y1 = 0;
+        var z1 = 0;
+        var x2;
+        var y2;
+        var z2;
+        var x;
+        var y;
+        var z;
+        var i = 0;
+
+        function change() {
+            document.body.style.backgroundColor = `rgb(${x},${y},${z})`;
+        }
+
+        function looper(k) {
+            setTimeout(function() {
+                x = Math.round(x1 + (k % 25) * (x2 - x1) / 25);
+                y = Math.round(y1 + (k % 25) * (y2 - y1) / 25);
+                z = Math.round(z1 + (k % 25) * (z2 - z1) / 25);
+                change();
+                //  document.body.innerHTML+=`${k}` +" " + `rgb(${x1},${y1},${z1})`  +" "+`rgb(${x2},${y2},${z2})`  +" "+`rgb(${x},${y},${z})`+"<br>";
+            }, 0)
+            i++;
+            setTimeout(function() {
+                number();
+            }, 40)
+        }
+
+        function number() {
+            //if (i<1500) { 
+            if (i >= 0) {
+                if (i >= 25 && ((i % 25) == 0)) {
+                    x1 = x2;
+                    y1 = y2;
+                    z1 = z2;
+                }
+                if ((i % 25) == 0) {
+                    x2 = Math.round(Math.random() * 255);
+                    y2 = Math.round(Math.random() * 255);
+                    z2 = Math.round(Math.random() * 255);
+
+                }
+                looper(i);
+            }
+        }
+        number();
+    </script>
+    <div id="instructions">
+            <h1>DRAW</h1>
+        with left mouse pressed
+            <h1>ERASE</h1>
+        with right mouse click
+            <h1>SEND</h1>
+        the drawing by pressing <i>enter</i>
+            <h1>SKIP</h1>
+        the category to draw by pressing
+        the skip button at top right
+            <h1>QUIT</h1>
+        the game with the button at top right
+            <h1>WIN</h1>
+        by making the AI guess the most
+        drawings within time
+    </div>
+    <footer>
+        <div id="credits">Developed by Ninad, Linh, Ramanpreet, Ridhwanul.</div>
+    </footer>
+</body></html>
