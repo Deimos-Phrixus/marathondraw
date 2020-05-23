@@ -139,7 +139,7 @@ async def handler(websocket, path):
 if __name__ == "__main__":
     asyncio.get_event_loop().run_until_complete(
         websockets.serve(
-            functools.partial(handler), 'localhost', 5555, max_size = 2**25))
+            functools.partial(handler), '0.0.0.0', 5555, max_size = 2**25))
     print("Serving server")
     asyncio.get_event_loop().run_forever()
 

@@ -3,3 +3,4 @@ pillow
 websockets
 numpy
 tensorflow
+gunicorn
