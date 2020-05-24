@@ -1,5 +1,0 @@
-matplotlib
-pillow
-websockets
-numpy
-tensorflow
