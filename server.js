@@ -1,4 +1,4 @@
-const socket = new WebSocket('ws://localhost:5555');
+const socket = new WebSocket('ws://marathondraw.herokuapp.com');
 
 //Connection apple
 socket.onopen = function (e) {
