@@ -58,14 +58,13 @@ function scoreboardScreen(data) {
                 looper(i);
             }
         }
-        number();
 
     </script>`;
     // 4, 4, 3,4,5,6, 2,3,4,5
     data = data.split(",")
     winner = data[2];
     htmlString = BGchanger;
-    htmlString = `
+    htmlString += `
         <div id="scoreboard">
         <div id="trophy"><h1>The winner is ` + winner + ` </h1></div>`;
     for (var i = 0; i < int(data[1]); i += 1) {
@@ -74,6 +73,7 @@ function scoreboardScreen(data) {
     htmlString += `<a href="/">Play again? </a>`;
     htmlString += "</div>";
     document.getElementById("container").innerHTML = htmlString;
+    number();
 }
 
 function loadSvg(msg) {
