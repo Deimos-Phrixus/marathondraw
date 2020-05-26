@@ -21,5 +21,5 @@ yourself
 Now you can run the servers on different tabs:
 ```
 > python serve_front.py # this will start the frontend pages as live server on multiple ports
-> python serve_back.py # stars the game server
+> python serve_back.py # starts the game server
 ```
