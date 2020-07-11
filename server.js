@@ -38,7 +38,7 @@ socket.onmessage = function (event) {
                     aiReply("Correct!");
                     resetBackground();
                 } else {
-                    aiReply("Draw bitch!");
+                    aiReply("Draw!");
                 }
                 changeToDraw(code2[1]);
             }
