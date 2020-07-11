@@ -67,10 +67,10 @@ function scoreboardScreen(data) {
     htmlString += `
         <div id="scoreboard">
         <div id="trophy"><h1>The winner is ` + winner + ` </h1></div>`;
-    for (var i = 0; i < int(data[1]); i += 1) {
+    /*for (var i = 0; i < int(data[1]); i += 1) {
         htmlString += "<div id='trophy"+(i+1)+"'><p> " + data[2 + i] + " > " + data[2 + int(data[1]) + i] + " </p></div>";
     }
-    htmlString += `<a href="/">Play again? </a>`;
+    htmlString += `<a href="/">Play again? </a>`;*/
     htmlString += "</div>";
     document.getElementById("container").innerHTML = htmlString;
     number();
